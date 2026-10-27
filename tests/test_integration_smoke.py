@@ -59,10 +59,10 @@ def test_end_to_end_video_pipeline_smoke():
         confidence_thresh=0.50,
         backend_choice="ONNX Runtime (Fastest / Recommended)"
     )
-    assert out_vid is not None and os.path.exists(out_vid)
+    assert out_vid is not None and os.path.exists(out_vid), f"Pipeline failed: {exp}, metrics={metrics}"
     assert out_plot is not None and os.path.exists(out_plot)
     assert len(exp) > 10
-    assert "Decision Status" in metrics
+    assert "Decision Status" in metrics, f"Status missing in metrics: {exp}"
     assert "Peak Fall Probability" in metrics
 
 def test_invalid_input_handling():
@@ -82,8 +82,8 @@ def test_temporal_confirmation_k_behavior():
         pytest.skip("Sample video file not found.")
 
     # High confirmation K should be stricter or equal to K=1
-    _, _, _, metrics_k1 = process_video_pipeline(sample_vid, confirmation_k=1, confidence_thresh=0.65)
-    _, _, _, metrics_k4 = process_video_pipeline(sample_vid, confirmation_k=4, confidence_thresh=0.65)
+    _, _, exp1, metrics_k1 = process_video_pipeline(sample_vid, confirmation_k=1, confidence_thresh=0.65)
+    _, _, exp4, metrics_k4 = process_video_pipeline(sample_vid, confirmation_k=4, confidence_thresh=0.65)
     
-    assert "Decision Status" in metrics_k1
-    assert "Decision Status" in metrics_k4
+    assert "Decision Status" in metrics_k1, f"K1 failed: {exp1}, {metrics_k1}"
+    assert "Decision Status" in metrics_k4, f"K4 failed: {exp4}, {metrics_k4}"

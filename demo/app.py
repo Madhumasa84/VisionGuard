@@ -134,7 +134,7 @@ def process_video_pipeline(
         extracted = extractor.extract_from_video(video_path, max_frames=250, target_fps=10.0)
         extractor.close()
     except Exception as e:
-        return None, None, f"[ERROR] Pose extraction error: {str(e)}", {"Status": "Extraction Failure"}
+        return None, None, f"[ERROR] Pose extraction error: {str(e)}", {"Status": "Extraction Failure", "Error": str(e)}
 
     t_pose_ms = (time.perf_counter() - t_pose0) * 1000.0
     raw_lms = extracted["landmarks"] # (T, 33, 4)
