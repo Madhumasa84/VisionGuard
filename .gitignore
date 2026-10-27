@@ -1,0 +1,59 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables & local secrets
+.env
+*.env
+!.env.example
+*.pem
+*.key
+*.token
+
+# OS and filesystem artifacts
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary runtime demonstration artifacts
+demo/temp_timeline.png
+demo/annotated_output.mp4
+/tmp/
+
+# Testing & Coverage caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Large Raw Datasets (Do not redistribute 2.0GB of raw human video recordings)
+# Extracted poses (.npz) and processed LOSO windows (.npy) are tracked; raw MP4 files are excluded.
+experiments/gmdcsa24_real/data/raw/
+datasets/raw/safer_real/

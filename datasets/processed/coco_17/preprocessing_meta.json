@@ -1,0 +1,41 @@
+{
+  "train": {
+    "total_windows": 952,
+    "fall_windows": 128,
+    "non_fall_windows": 824,
+    "fall_ratio": 0.13445378151260504,
+    "ambiguous_excluded": 64,
+    "unique_subjects": [
+      "P01",
+      "P02",
+      "P03",
+      "P04",
+      "P05",
+      "P06",
+      "P07",
+      "P08"
+    ]
+  },
+  "val": {
+    "total_windows": 430,
+    "fall_windows": 56,
+    "non_fall_windows": 374,
+    "fall_ratio": 0.13023255813953488,
+    "ambiguous_excluded": 40,
+    "unique_subjects": [
+      "P09",
+      "P10"
+    ]
+  },
+  "test": {
+    "total_windows": 430,
+    "fall_windows": 56,
+    "non_fall_windows": 374,
+    "fall_ratio": 0.13023255813953488,
+    "ambiguous_excluded": 40,
+    "unique_subjects": [
+      "P11",
+      "P12"
+    ]
+  }
+}

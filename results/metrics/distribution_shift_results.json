@@ -1,0 +1,38 @@
+{
+  "clean": {
+    "f1_score": 0.9333333333333333,
+    "recall": 1.0,
+    "precision": 0.875,
+    "auroc": 0.9982333842627961,
+    "brier_score": 0.014109997771364178,
+    "abstention_rate": 0.0,
+    "accepted_samples": 430
+  },
+  "occlusion_40pct": {
+    "f1_score": 0.25925925925925924,
+    "recall": 1.0,
+    "precision": 0.14893617021276595,
+    "auroc": 0.7443659281894576,
+    "brier_score": 0.6243754400972666,
+    "abstention_rate": 0.2023,
+    "accepted_samples": 343
+  },
+  "gaussian_noise_0.15": {
+    "f1_score": 0.9333333333333333,
+    "recall": 1.0,
+    "precision": 0.875,
+    "auroc": 0.9985198624904508,
+    "brier_score": 0.014388303587986442,
+    "abstention_rate": 0.0,
+    "accepted_samples": 430
+  },
+  "post_norm_compression_0.6x": {
+    "f1_score": 0.23045267489711935,
+    "recall": 1.0,
+    "precision": 0.13023255813953488,
+    "auroc": 0.9759835752482812,
+    "brier_score": 0.5690721895775306,
+    "abstention_rate": 0.1907,
+    "accepted_samples": 348
+  }
+}

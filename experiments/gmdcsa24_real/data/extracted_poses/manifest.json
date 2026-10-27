@@ -1,0 +1,1611 @@
+{
+  "dataset": "GMDCSA-24 v2.1 (Real Human Activity and Fall Videos)",
+  "provenance": "real_human_video_recordings",
+  "publication": "PMC11416611 (Data in Brief, 2024)",
+  "zenodo_doi": "10.5281/zenodo.13354453",
+  "license": "MIT",
+  "total_videos": 160,
+  "target_fps": 10.0,
+  "records": [
+    {
+      "video_id": "s1_fall_01",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_01.npz",
+      "frame_count": 68,
+      "duration_sec": 6.7978925704956055,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_02",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_02.npz",
+      "frame_count": 63,
+      "duration_sec": 6.268396854400635,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_03",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_03.npz",
+      "frame_count": 59,
+      "duration_sec": 5.854341983795166,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_04",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_04.npz",
+      "frame_count": 49,
+      "duration_sec": 4.893336772918701,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_05",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_05.npz",
+      "frame_count": 58,
+      "duration_sec": 5.75663948059082,
+      "num_events": 1
+    },
+    {
+      "video_id": "s1_fall_06",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_06.npz",
+      "frame_count": 57,
+      "duration_sec": 5.663521766662598,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_07",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_07.npz",
+      "frame_count": 51,
+      "duration_sec": 5.052451133728027,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_08",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_08.npz",
+      "frame_count": 43,
+      "duration_sec": 4.252190589904785,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_09",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_09.npz",
+      "frame_count": 44,
+      "duration_sec": 4.413113117218018,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_10",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_10.npz",
+      "frame_count": 45,
+      "duration_sec": 4.463584899902344,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_11",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_11.npz",
+      "frame_count": 61,
+      "duration_sec": 6.0637125968933105,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_12",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_12.npz",
+      "frame_count": 67,
+      "duration_sec": 6.765066146850586,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_13",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_13.npz",
+      "frame_count": 43,
+      "duration_sec": 4.253812313079834,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_14",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_14.npz",
+      "frame_count": 57,
+      "duration_sec": 5.663621425628662,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_15",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_15.npz",
+      "frame_count": 60,
+      "duration_sec": 5.967850208282471,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_fall_16",
+      "subject": "Subject 1",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_fall_16.npz",
+      "frame_count": 61,
+      "duration_sec": 6.063613414764404,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_adl_01",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_01.npz",
+      "frame_count": 82,
+      "duration_sec": 8.205994606018066,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_adl_02",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_02.npz",
+      "frame_count": 66,
+      "duration_sec": 6.588176727294922,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_adl_03",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_03.npz",
+      "frame_count": 67,
+      "duration_sec": 6.655817985534668,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_adl_04",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_04.npz",
+      "frame_count": 57,
+      "duration_sec": 5.740955352783203,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_adl_05",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_05.npz",
+      "frame_count": 105,
+      "duration_sec": 10.47843074798584,
+      "num_events": 3
+    },
+    {
+      "video_id": "s1_adl_06",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_06.npz",
+      "frame_count": 122,
+      "duration_sec": 12.191913604736328,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_adl_07",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_07.npz",
+      "frame_count": 75,
+      "duration_sec": 7.469936370849609,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_adl_08",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_08.npz",
+      "frame_count": 63,
+      "duration_sec": 6.255799770355225,
+      "num_events": 1
+    },
+    {
+      "video_id": "s1_adl_09",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_09.npz",
+      "frame_count": 49,
+      "duration_sec": 4.891689777374268,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_adl_10",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_10.npz",
+      "frame_count": 39,
+      "duration_sec": 3.8871357440948486,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_adl_11",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_11.npz",
+      "frame_count": 93,
+      "duration_sec": 9.27991008758545,
+      "num_events": 3
+    },
+    {
+      "video_id": "s1_adl_12",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_12.npz",
+      "frame_count": 73,
+      "duration_sec": 7.262290000915527,
+      "num_events": 4
+    },
+    {
+      "video_id": "s1_adl_13",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_13.npz",
+      "frame_count": 63,
+      "duration_sec": 6.271880149841309,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_adl_14",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_14.npz",
+      "frame_count": 58,
+      "duration_sec": 5.789947986602783,
+      "num_events": 3
+    },
+    {
+      "video_id": "s1_adl_15",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_15.npz",
+      "frame_count": 71,
+      "duration_sec": 7.101599216461182,
+      "num_events": 2
+    },
+    {
+      "video_id": "s1_adl_16",
+      "subject": "Subject 1",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s1_adl_16.npz",
+      "frame_count": 35,
+      "duration_sec": 3.4536807537078857,
+      "num_events": 1
+    },
+    {
+      "video_id": "s2_fall_01",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_01.npz",
+      "frame_count": 64,
+      "duration_sec": 6.334583759307861,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_02",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_02.npz",
+      "frame_count": 84,
+      "duration_sec": 8.347330093383789,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_03",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_03.npz",
+      "frame_count": 70,
+      "duration_sec": 6.940972805023193,
+      "num_events": 1
+    },
+    {
+      "video_id": "s2_fall_04",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_04.npz",
+      "frame_count": 102,
+      "duration_sec": 10.142684936523438,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_05",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_05.npz",
+      "frame_count": 45,
+      "duration_sec": 4.427508354187012,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_06",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_06.npz",
+      "frame_count": 65,
+      "duration_sec": 6.429096698760986,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_07",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_07.npz",
+      "frame_count": 45,
+      "duration_sec": 4.427443027496338,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_08",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_08.npz",
+      "frame_count": 61,
+      "duration_sec": 6.030828952789307,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_fall_09",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_09.npz",
+      "frame_count": 56,
+      "duration_sec": 5.5330986976623535,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_10",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_10.npz",
+      "frame_count": 167,
+      "duration_sec": 11.070808410644531,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_fall_11",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_11.npz",
+      "frame_count": 80,
+      "duration_sec": 10.526708602905273,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_12",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_12.npz",
+      "frame_count": 92,
+      "duration_sec": 12.124167442321777,
+      "num_events": 4
+    },
+    {
+      "video_id": "s2_fall_13",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_13.npz",
+      "frame_count": 133,
+      "duration_sec": 8.829113006591797,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_14",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_14.npz",
+      "frame_count": 168,
+      "duration_sec": 11.134757995605469,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_15",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_15.npz",
+      "frame_count": 116,
+      "duration_sec": 11.564737319946289,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_fall_16",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_16.npz",
+      "frame_count": 40,
+      "duration_sec": 3.917030096054077,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_17",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_17.npz",
+      "frame_count": 65,
+      "duration_sec": 6.430383682250977,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_18",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_18.npz",
+      "frame_count": 115,
+      "duration_sec": 11.453067779541016,
+      "num_events": 4
+    },
+    {
+      "video_id": "s2_fall_19",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_19.npz",
+      "frame_count": 155,
+      "duration_sec": 15.487776756286621,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_20",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_20.npz",
+      "frame_count": 114,
+      "duration_sec": 11.357128143310547,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_fall_21",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_21.npz",
+      "frame_count": 95,
+      "duration_sec": 9.456167221069336,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_fall_22",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_22.npz",
+      "frame_count": 52,
+      "duration_sec": 5.134219169616699,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_23",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_23.npz",
+      "frame_count": 75,
+      "duration_sec": 7.437328815460205,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_fall_24",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_24.npz",
+      "frame_count": 71,
+      "duration_sec": 7.036774635314941,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_fall_25",
+      "subject": "Subject 2",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_fall_25.npz",
+      "frame_count": 73,
+      "duration_sec": 7.230947017669678,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_01",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_01.npz",
+      "frame_count": 114,
+      "duration_sec": 11.360156059265137,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_adl_02",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_02.npz",
+      "frame_count": 118,
+      "duration_sec": 11.759896278381348,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_03",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_03.npz",
+      "frame_count": 119,
+      "duration_sec": 11.870269775390625,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_adl_04",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_04.npz",
+      "frame_count": 78,
+      "duration_sec": 7.741000652313232,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_05",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_05.npz",
+      "frame_count": 108,
+      "duration_sec": 10.7505521774292,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_adl_06",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_06.npz",
+      "frame_count": 107,
+      "duration_sec": 10.652900695800781,
+      "num_events": 1
+    },
+    {
+      "video_id": "s2_adl_07",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_07.npz",
+      "frame_count": 130,
+      "duration_sec": 12.959912300109863,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_08",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_08.npz",
+      "frame_count": 136,
+      "duration_sec": 13.565117835998535,
+      "num_events": 1
+    },
+    {
+      "video_id": "s2_adl_09",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_09.npz",
+      "frame_count": 109,
+      "duration_sec": 10.859911918640137,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_10",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_10.npz",
+      "frame_count": 76,
+      "duration_sec": 7.534546375274658,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_11",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_11.npz",
+      "frame_count": 100,
+      "duration_sec": 9.95179271697998,
+      "num_events": 1
+    },
+    {
+      "video_id": "s2_adl_12",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_12.npz",
+      "frame_count": 76,
+      "duration_sec": 7.53455924987793,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_13",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_13.npz",
+      "frame_count": 49,
+      "duration_sec": 4.814863681793213,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_adl_14",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_14.npz",
+      "frame_count": 83,
+      "duration_sec": 10.92434310913086,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_adl_15",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_15.npz",
+      "frame_count": 90,
+      "duration_sec": 11.8548002243042,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_16",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_16.npz",
+      "frame_count": 173,
+      "duration_sec": 11.470776557922363,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_17",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_17.npz",
+      "frame_count": 88,
+      "duration_sec": 11.598906517028809,
+      "num_events": 1
+    },
+    {
+      "video_id": "s2_adl_18",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_18.npz",
+      "frame_count": 88,
+      "duration_sec": 11.598673820495605,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_19",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_19.npz",
+      "frame_count": 85,
+      "duration_sec": 11.196112632751465,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_adl_20",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_20.npz",
+      "frame_count": 88,
+      "duration_sec": 11.598740577697754,
+      "num_events": 3
+    },
+    {
+      "video_id": "s2_adl_21",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_21.npz",
+      "frame_count": 79,
+      "duration_sec": 10.396050453186035,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_22",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_22.npz",
+      "frame_count": 91,
+      "duration_sec": 11.996010780334473,
+      "num_events": 2
+    },
+    {
+      "video_id": "s2_adl_23",
+      "subject": "Subject 2",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s2_adl_23.npz",
+      "frame_count": 109,
+      "duration_sec": 7.213508129119873,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_fall_01",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_01.npz",
+      "frame_count": 38,
+      "duration_sec": 3.709249973297119,
+      "num_events": 1
+    },
+    {
+      "video_id": "s3_fall_02",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_02.npz",
+      "frame_count": 66,
+      "duration_sec": 6.52822208404541,
+      "num_events": 3
+    },
+    {
+      "video_id": "s3_fall_03",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_03.npz",
+      "frame_count": 56,
+      "duration_sec": 5.534547805786133,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_fall_04",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_04.npz",
+      "frame_count": 55,
+      "duration_sec": 5.424051761627197,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_fall_05",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_05.npz",
+      "frame_count": 100,
+      "duration_sec": 9.948872566223145,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_fall_06",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_06.npz",
+      "frame_count": 56,
+      "duration_sec": 5.520177841186523,
+      "num_events": 1
+    },
+    {
+      "video_id": "s3_fall_07",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_07.npz",
+      "frame_count": 90,
+      "duration_sec": 8.958296775817871,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_fall_08",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_08.npz",
+      "frame_count": 62,
+      "duration_sec": 6.235085487365723,
+      "num_events": 1
+    },
+    {
+      "video_id": "s3_fall_09",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_09.npz",
+      "frame_count": 62,
+      "duration_sec": 6.123842239379883,
+      "num_events": 3
+    },
+    {
+      "video_id": "s3_fall_10",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_10.npz",
+      "frame_count": 44,
+      "duration_sec": 4.3186116218566895,
+      "num_events": 1
+    },
+    {
+      "video_id": "s3_fall_11",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_11.npz",
+      "frame_count": 89,
+      "duration_sec": 8.844988822937012,
+      "num_events": 3
+    },
+    {
+      "video_id": "s3_fall_12",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_12.npz",
+      "frame_count": 43,
+      "duration_sec": 4.222653388977051,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_fall_13",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_13.npz",
+      "frame_count": 41,
+      "duration_sec": 4.014776706695557,
+      "num_events": 3
+    },
+    {
+      "video_id": "s3_fall_14",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_14.npz",
+      "frame_count": 123,
+      "duration_sec": 12.272069931030273,
+      "num_events": 3
+    },
+    {
+      "video_id": "s3_fall_15",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_15.npz",
+      "frame_count": 43,
+      "duration_sec": 5.58316707611084,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_fall_16",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_16.npz",
+      "frame_count": 91,
+      "duration_sec": 6.01348352432251,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_fall_17",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_17.npz",
+      "frame_count": 64,
+      "duration_sec": 8.380345344543457,
+      "num_events": 3
+    },
+    {
+      "video_id": "s3_fall_18",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_18.npz",
+      "frame_count": 178,
+      "duration_sec": 11.806894302368164,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_fall_19",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_19.npz",
+      "frame_count": 43,
+      "duration_sec": 5.5807905197143555,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_fall_20",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_20.npz",
+      "frame_count": 47,
+      "duration_sec": 6.108604431152344,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_fall_21",
+      "subject": "Subject 3",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_fall_21.npz",
+      "frame_count": 92,
+      "duration_sec": 9.136167526245117,
+      "num_events": 3
+    },
+    {
+      "video_id": "s3_adl_01",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_01.npz",
+      "frame_count": 87,
+      "duration_sec": 8.652885437011719,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_adl_02",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_02.npz",
+      "frame_count": 91,
+      "duration_sec": 9.037120819091797,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_adl_03",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_03.npz",
+      "frame_count": 99,
+      "duration_sec": 9.854727745056152,
+      "num_events": 4
+    },
+    {
+      "video_id": "s3_adl_04",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_04.npz",
+      "frame_count": 100,
+      "duration_sec": 9.949005126953125,
+      "num_events": 1
+    },
+    {
+      "video_id": "s3_adl_05",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_05.npz",
+      "frame_count": 52,
+      "duration_sec": 5.135733127593994,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_adl_06",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_06.npz",
+      "frame_count": 89,
+      "duration_sec": 8.844889640808105,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_adl_07",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_07.npz",
+      "frame_count": 34,
+      "duration_sec": 3.312045097351074,
+      "num_events": 1
+    },
+    {
+      "video_id": "s3_adl_08",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_08.npz",
+      "frame_count": 49,
+      "duration_sec": 4.829095840454102,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_adl_09",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_09.npz",
+      "frame_count": 78,
+      "duration_sec": 7.742449760437012,
+      "num_events": 3
+    },
+    {
+      "video_id": "s3_adl_10",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_10.npz",
+      "frame_count": 124,
+      "duration_sec": 12.366539001464844,
+      "num_events": 1
+    },
+    {
+      "video_id": "s3_adl_11",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_11.npz",
+      "frame_count": 121,
+      "duration_sec": 12.048033714294434,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_adl_12",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_12.npz",
+      "frame_count": 160,
+      "duration_sec": 10.606624603271484,
+      "num_events": 3
+    },
+    {
+      "video_id": "s3_adl_13",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_13.npz",
+      "frame_count": 65,
+      "duration_sec": 8.508553504943848,
+      "num_events": 1
+    },
+    {
+      "video_id": "s3_adl_14",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_14.npz",
+      "frame_count": 67,
+      "duration_sec": 8.79897403717041,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_adl_15",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_15.npz",
+      "frame_count": 58,
+      "duration_sec": 7.598578929901123,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_adl_16",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_16.npz",
+      "frame_count": 102,
+      "duration_sec": 10.156704902648926,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_adl_17",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_17.npz",
+      "frame_count": 91,
+      "duration_sec": 11.996142387390137,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_adl_18",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_18.npz",
+      "frame_count": 84,
+      "duration_sec": 11.05487060546875,
+      "num_events": 3
+    },
+    {
+      "video_id": "s3_adl_19",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_19.npz",
+      "frame_count": 49,
+      "duration_sec": 6.380375385284424,
+      "num_events": 1
+    },
+    {
+      "video_id": "s3_adl_20",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_20.npz",
+      "frame_count": 71,
+      "duration_sec": 9.326681137084961,
+      "num_events": 1
+    },
+    {
+      "video_id": "s3_adl_21",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_21.npz",
+      "frame_count": 102,
+      "duration_sec": 10.158149719238281,
+      "num_events": 2
+    },
+    {
+      "video_id": "s3_adl_22",
+      "subject": "Subject 3",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s3_adl_22.npz",
+      "frame_count": 95,
+      "duration_sec": 9.45606803894043,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_01",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_01.npz",
+      "frame_count": 47,
+      "duration_sec": 4.623992919921875,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_02",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_02.npz",
+      "frame_count": 30,
+      "duration_sec": 2.910459518432617,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_03",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_03.npz",
+      "frame_count": 67,
+      "duration_sec": 6.638477802276611,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_04",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_04.npz",
+      "frame_count": 47,
+      "duration_sec": 4.621107578277588,
+      "num_events": 1
+    },
+    {
+      "video_id": "s4_fall_05",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_05.npz",
+      "frame_count": 74,
+      "duration_sec": 7.342577934265137,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_06",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_06.npz",
+      "frame_count": 61,
+      "duration_sec": 6.029147624969482,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_07",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_07.npz",
+      "frame_count": 63,
+      "duration_sec": 6.2379584312438965,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_08",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_08.npz",
+      "frame_count": 63,
+      "duration_sec": 6.2240705490112305,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_09",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_09.npz",
+      "frame_count": 61,
+      "duration_sec": 6.032220840454102,
+      "num_events": 1
+    },
+    {
+      "video_id": "s4_fall_10",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_10.npz",
+      "frame_count": 51,
+      "duration_sec": 5.024072647094727,
+      "num_events": 3
+    },
+    {
+      "video_id": "s4_fall_11",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_11.npz",
+      "frame_count": 46,
+      "duration_sec": 4.527926445007324,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_12",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_12.npz",
+      "frame_count": 46,
+      "duration_sec": 4.524782657623291,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_13",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_13.npz",
+      "frame_count": 50,
+      "duration_sec": 4.926341533660889,
+      "num_events": 1
+    },
+    {
+      "video_id": "s4_fall_14",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_14.npz",
+      "frame_count": 53,
+      "duration_sec": 5.216129779815674,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_15",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_15.npz",
+      "frame_count": 49,
+      "duration_sec": 4.816021919250488,
+      "num_events": 1
+    },
+    {
+      "video_id": "s4_fall_16",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_16.npz",
+      "frame_count": 71,
+      "duration_sec": 7.038599014282227,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_fall_17",
+      "subject": "Subject 4",
+      "category": "Fall",
+      "is_fall_video": true,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_fall_17.npz",
+      "frame_count": 69,
+      "duration_sec": 6.829006671905518,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_01",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_01.npz",
+      "frame_count": 124,
+      "duration_sec": 12.36788272857666,
+      "num_events": 1
+    },
+    {
+      "video_id": "s4_adl_02",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_02.npz",
+      "frame_count": 105,
+      "duration_sec": 10.460881233215332,
+      "num_events": 1
+    },
+    {
+      "video_id": "s4_adl_03",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_03.npz",
+      "frame_count": 89,
+      "duration_sec": 8.845186233520508,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_04",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_04.npz",
+      "frame_count": 130,
+      "duration_sec": 12.975936889648438,
+      "num_events": 1
+    },
+    {
+      "video_id": "s4_adl_05",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_05.npz",
+      "frame_count": 74,
+      "duration_sec": 7.32820463180542,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_06",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_06.npz",
+      "frame_count": 66,
+      "duration_sec": 6.544040679931641,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_07",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_07.npz",
+      "frame_count": 50,
+      "duration_sec": 4.926374435424805,
+      "num_events": 1
+    },
+    {
+      "video_id": "s4_adl_08",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_08.npz",
+      "frame_count": 123,
+      "duration_sec": 12.270448684692383,
+      "num_events": 3
+    },
+    {
+      "video_id": "s4_adl_09",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_09.npz",
+      "frame_count": 121,
+      "duration_sec": 12.062453269958496,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_10",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_10.npz",
+      "frame_count": 128,
+      "duration_sec": 12.767688751220703,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_11",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_11.npz",
+      "frame_count": 107,
+      "duration_sec": 10.654457092285156,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_12",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_12.npz",
+      "frame_count": 86,
+      "duration_sec": 8.542301177978516,
+      "num_events": 4
+    },
+    {
+      "video_id": "s4_adl_13",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_13.npz",
+      "frame_count": 55,
+      "duration_sec": 5.422587871551514,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_14",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_14.npz",
+      "frame_count": 83,
+      "duration_sec": 8.238685607910156,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_15",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_15.npz",
+      "frame_count": 53,
+      "duration_sec": 5.229008674621582,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_16",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_16.npz",
+      "frame_count": 71,
+      "duration_sec": 7.037037372589111,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_17",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_17.npz",
+      "frame_count": 62,
+      "duration_sec": 6.12495756149292,
+      "num_events": 1
+    },
+    {
+      "video_id": "s4_adl_18",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_18.npz",
+      "frame_count": 141,
+      "duration_sec": 14.063947677612305,
+      "num_events": 2
+    },
+    {
+      "video_id": "s4_adl_19",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_19.npz",
+      "frame_count": 99,
+      "duration_sec": 9.83840560913086,
+      "num_events": 4
+    },
+    {
+      "video_id": "s4_adl_20",
+      "subject": "Subject 4",
+      "category": "ADL",
+      "is_fall_video": false,
+      "file_path": "/content/VisionGuardLite/experiments/gmdcsa24_real/data/extracted_poses/s4_adl_20.npz",
+      "frame_count": 175,
+      "duration_sec": 17.487897872924805,
+      "num_events": 4
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "Model A (BaselineMLP)": {
+    "parameters": 100322,
+    "model_size_kb": 398.45,
+    "precision": 0.875,
+    "recall": 1.0,
+    "f1_score": 0.9333,
+    "auroc": 0.9988,
+    "auprc": 0.9922,
+    "brier_score": 0.0137,
+    "median_latency_ms": 0.11,
+    "p95_latency_ms": 0.136,
+    "confusion_matrix": {
+      "tn": 366,
+      "fp": 8,
+      "fn": 0,
+      "tp": 56
+    }
+  },
+  "Model B (TemporalCNN)": {
+    "parameters": 66274,
+    "model_size_kb": 268.44,
+    "precision": 0.875,
+    "recall": 1.0,
+    "f1_score": 0.9333,
+    "auroc": 0.9982,
+    "auprc": 0.9888,
+    "brier_score": 0.0141,
+    "median_latency_ms": 0.37,
+    "p95_latency_ms": 0.492,
+    "confusion_matrix": {
+      "tn": 366,
+      "fp": 8,
+      "fn": 0,
+      "tp": 56
+    }
+  },
+  "Model C (SmallTCN)": {
+    "parameters": 67154,
+    "model_size_kb": 281.14,
+    "precision": 0.875,
+    "recall": 1.0,
+    "f1_score": 0.9333,
+    "auroc": 0.9982,
+    "auprc": 0.9882,
+    "brier_score": 0.0147,
+    "median_latency_ms": 4.499,
+    "p95_latency_ms": 11.617,
+    "confusion_matrix": {
+      "tn": 366,
+      "fp": 8,
+      "fn": 0,
+      "tp": 56
+    }
+  }
+}

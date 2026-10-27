@@ -1,0 +1,14 @@
+{
+  "onnx_path": "/content/VisionGuardLite/exported_models/temporal_cnn.onnx",
+  "model_size_kb": 258.92,
+  "int8_onnx_path": "/content/VisionGuardLite/exported_models/temporal_cnn_int8.onnx",
+  "int8_size_kb": 71.41,
+  "max_absolute_diff": 1.430511474609375e-06,
+  "numerical_parity_passed": true,
+  "median_latency_ms": 0.06984250103414524,
+  "p95_latency_ms": 0.09138209898083002,
+  "mean_latency_ms": 0.0739132950820931,
+  "min_latency_ms": 0.0682419995428063,
+  "int8_median_latency_ms": 0.26472549961908953,
+  "int8_p95_latency_ms": 0.31575144930684473
+}

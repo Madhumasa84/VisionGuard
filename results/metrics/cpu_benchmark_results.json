@@ -1,0 +1,61 @@
+{
+  "model_loading": {
+    "pytorch_load_time_ms": 14.6,
+    "onnx_load_time_ms": 7.63,
+    "onnx_model_path": "exported_models/real_temporalcnn.onnx",
+    "pytorch_ckpt_path": "checkpoints/real_temporalcnn_best.pt"
+  },
+  "pose_detection": {
+    "median_ms": 23.6,
+    "p95_ms": 29.89,
+    "mean_ms": 24.27,
+    "min_ms": 20.04,
+    "max_ms": 35.11
+  },
+  "feature_preprocessing": {
+    "median_ms": 0.2926,
+    "p95_ms": 0.3715,
+    "mean_ms": 0.3043
+  },
+  "classifier_inference": {
+    "batch_size": 1,
+    "pytorch": {
+      "median_ms": 0.5557,
+      "p95_ms": 1.0175,
+      "mean_ms": 0.5944
+    },
+    "onnx_runtime": {
+      "median_ms": 0.2045,
+      "p95_ms": 0.4528,
+      "mean_ms": 0.2353
+    },
+    "numerical_parity_max_diff": 9.5367431640625e-07,
+    "onnx_speedup_factor": 2.72
+  },
+  "uncertainty_estimation": {
+    "median_ms": 0.0318,
+    "p95_ms": 0.0553
+  },
+  "temporal_filtering": {
+    "median_ms": 0.00229,
+    "p95_ms": 0.00294
+  },
+  "slm_explanation": {
+    "type": "TemplateExplainer (Deterministic, Zero GPU overhead)",
+    "median_ms": 0.005,
+    "p95_ms": 0.0061,
+    "notes": "SLM transformer generation kept optional for low-resource CPU laptops."
+  },
+  "end_to_end_video": {
+    "video_duration_sec": 5.0,
+    "frames_processed": 50,
+    "windows_evaluated": 5,
+    "total_elapsed_sec": 2.157,
+    "effective_fps": 23.18,
+    "realtime_factor": 2.32,
+    "memory_start_mb": 290.05,
+    "memory_peak_mb": 561.24,
+    "memory_delta_mb": 271.19,
+    "cpu_utilization_percent": 15.9
+  }
+}

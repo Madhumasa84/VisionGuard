@@ -1,0 +1,154 @@
+{
+  "fold_1": {
+    "test_subject": "Subject 1",
+    "val_subject": "Subject 4",
+    "train_subjects": [
+      "Subject 2",
+      "Subject 3"
+    ],
+    "stats": {
+      "train": {
+        "total_windows": 1013,
+        "fall_windows": 358,
+        "normal_windows": 655,
+        "fall_ratio": 0.35340572556762095,
+        "subjects": [
+          "Subject 2",
+          "Subject 3"
+        ]
+      },
+      "val": {
+        "total_windows": 374,
+        "fall_windows": 82,
+        "normal_windows": 292,
+        "fall_ratio": 0.2192513368983957,
+        "subjects": [
+          "Subject 4"
+        ]
+      },
+      "test": {
+        "total_windows": 222,
+        "fall_windows": 79,
+        "normal_windows": 143,
+        "fall_ratio": 0.35585585585585583,
+        "subjects": [
+          "Subject 1"
+        ]
+      }
+    }
+  },
+  "fold_2": {
+    "test_subject": "Subject 2",
+    "val_subject": "Subject 4",
+    "train_subjects": [
+      "Subject 1",
+      "Subject 3"
+    ],
+    "stats": {
+      "train": {
+        "total_windows": 637,
+        "fall_windows": 222,
+        "normal_windows": 415,
+        "fall_ratio": 0.34850863422291994,
+        "subjects": [
+          "Subject 1",
+          "Subject 3"
+        ]
+      },
+      "val": {
+        "total_windows": 374,
+        "fall_windows": 82,
+        "normal_windows": 292,
+        "fall_ratio": 0.2192513368983957,
+        "subjects": [
+          "Subject 4"
+        ]
+      },
+      "test": {
+        "total_windows": 598,
+        "fall_windows": 215,
+        "normal_windows": 383,
+        "fall_ratio": 0.3595317725752508,
+        "subjects": [
+          "Subject 2"
+        ]
+      }
+    }
+  },
+  "fold_3": {
+    "test_subject": "Subject 3",
+    "val_subject": "Subject 4",
+    "train_subjects": [
+      "Subject 1",
+      "Subject 2"
+    ],
+    "stats": {
+      "train": {
+        "total_windows": 820,
+        "fall_windows": 294,
+        "normal_windows": 526,
+        "fall_ratio": 0.35853658536585364,
+        "subjects": [
+          "Subject 1",
+          "Subject 2"
+        ]
+      },
+      "val": {
+        "total_windows": 374,
+        "fall_windows": 82,
+        "normal_windows": 292,
+        "fall_ratio": 0.2192513368983957,
+        "subjects": [
+          "Subject 4"
+        ]
+      },
+      "test": {
+        "total_windows": 415,
+        "fall_windows": 143,
+        "normal_windows": 272,
+        "fall_ratio": 0.344578313253012,
+        "subjects": [
+          "Subject 3"
+        ]
+      }
+    }
+  },
+  "fold_4": {
+    "test_subject": "Subject 4",
+    "val_subject": "Subject 3",
+    "train_subjects": [
+      "Subject 1",
+      "Subject 2"
+    ],
+    "stats": {
+      "train": {
+        "total_windows": 820,
+        "fall_windows": 294,
+        "normal_windows": 526,
+        "fall_ratio": 0.35853658536585364,
+        "subjects": [
+          "Subject 1",
+          "Subject 2"
+        ]
+      },
+      "val": {
+        "total_windows": 415,
+        "fall_windows": 143,
+        "normal_windows": 272,
+        "fall_ratio": 0.344578313253012,
+        "subjects": [
+          "Subject 3"
+        ]
+      },
+      "test": {
+        "total_windows": 374,
+        "fall_windows": 82,
+        "normal_windows": 292,
+        "fall_ratio": 0.2192513368983957,
+        "subjects": [
+          "Subject 4"
+        ]
+      }
+    }
+  }
+}
