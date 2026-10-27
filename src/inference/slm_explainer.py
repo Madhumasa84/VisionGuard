@@ -37,13 +37,13 @@ class TemplateExplainer:
                 )
         elif activity in ['fall', 'possible_fall']:
             text = (
-                f"ALERT: A sudden downward fall transition was detected with high confidence ({confidence:.0%}). "
-                f"The body reached ground-level orientation."
+                f"ALERT: The model classified the tracked activity as fall-like with {confidence:.0%} confidence. "
+                f"Review the video; this prediction does not verify an injury."
             )
         else:
             text = (
-                f"Normal posture observed ({activity}) with {confidence:.0%} confidence. "
-                f"Keypoint trajectory remains stable."
+                f"The model classified the tracked activity as {activity} with {confidence:.0%} confidence. "
+                f"This prediction does not rule out a fall."
             )
 
         latency_ms = (time.perf_counter() - t0) * 1000.0

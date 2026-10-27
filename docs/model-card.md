@@ -1,4 +1,6 @@
-# Model Card: VisionGuard Lite TemporalCNN
+# Model card: VisionGuard Lite TemporalCNN
+
+The measurements below are historical research results. They do not evaluate the updated demo tracking-quality gate or establish clinical reliability. See [architecture](architecture.md) for current behavior and [benchmarks](benchmarks.md) for evaluation context.
 
 ## Model Details
 - **Architecture**: Temporal Convolutional Network (1D TemporalCNN)
@@ -47,7 +49,7 @@
 ### Calibration Analysis under Cross-Subject Shift
 - **Pre-Scaling Mean ECE**: 63.3% across the 4 folds.
 - **Post-Scaling Mean ECE ($T = 1.627$)**: 59.3%.
-- **Finding**: While temperature scaling softens extreme logit outputs, cross-subject biometric variance across only 4 subjects leaves non-negligible calibration error (~59%). This empirical finding demonstrates why raw probability thresholding cannot guarantee operational safety, mandating an explicit temporal confirmation policy for real-world deployments.
+- **Finding**: While temperature scaling softens extreme logit outputs, cross-subject biometric variance across only 4 subjects leaves non-negligible calibration error (~59%). This empirical finding demonstrates why raw probability thresholding cannot guarantee operational safety, motivating further research into confirmation and rejection policies; neither establishes operational safety.
 
 ---
 
@@ -55,24 +57,24 @@
 
 Continuous evaluation over simulated continuous activity monitoring streams:
 
-| Confirmation Policy | Window Criteria | Event Recall | Missed Falls | False Alarm Rate | Mean Confirmation Delay | Operational Assessment |
+| Confirmation Policy | Window Criteria | Event Recall | Missed Falls | False Alarm Rate | Mean Physical Detection Delay | Operational Assessment |
 | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
 | **Raw Unfiltered ($K=1$)** | $\ge 1$ window | 96.1% (74/77) | 3 | 119.72 FA/hr (~1 / 30.1s) | 1.66s | Unusable without confirmation |
-| **Confirmed Filter ($K=2$)** | $\ge 2$ windows | **92.2% (71/77)** | 6 | **95.00 FA/hr (~1 / 37.9s)** | **2.18s** | **Recommended edge default** |
-| **Strict Filter ($K=3$)** | $\ge 3$ windows | 87.0% (67/77) | 10 | 87.50 FA/hr (~1 / 41.1s) | 2.67s | Conservative setting |
-| **High Precision ($K=4$)** | $\ge 4$ windows | 70.1% (54/77) | 23 | 83.75 FA/hr (~1 / 43.0s) | 3.14s | Elevated false-negative risk |
+| **Confirmed Filter ($K=2$)** | $\ge 2$ windows | **92.2% (71/77)** | 6 | **95.00 FA/hr (~1 / 37.9s)** | **2.18s** | **Demo default; high false-alarm rate remains** |
+| **Strict Filter ($K=3$)** | $\ge 3$ windows | 87.0% (67/77) | 10 | 87.53 FA/hr (~1 / 41.1s) | 2.67s | Conservative setting |
+| **High Precision ($K=4$)** | $\ge 4$ windows | 70.1% (54/77) | 23 | 83.80 FA/hr (~1 / 43.0s) | 3.14s | Elevated false-negative risk |
 
 ---
 
 ## Explanation Engine Architecture
 
 1. **Deterministic Rule Engine (`TemplateExplainer` - Default Runtime)**:
-   - Zero-overhead execution: **0.005 ms** median latency on CPU.
-   - Converts kinematic telemetry (joint angles, torso velocity, confirmation state) into factual, grounded natural-language summaries.
-   - Enforced by `EvidenceConsistencyChecker` to reject ungrounded or speculative claims.
+   - Previously measured execution: **0.005 ms** median latency on CPU.
+   - Summarizes activity classification, confidence, visibility, uncertainty, and confirmation evidence. The demo does not supply measured joint angles or torso velocity to this engine.
+   - Checked by `EvidenceConsistencyChecker` for uncertainty wording and selected unsupported claims; the result is reported in diagnostics.
 2. **Optional Small Language Model (`QwenSLMExplainer` - Research Mode)**:
-   - For research into generative multimodal explanations, supports local quantized SLMs (e.g. Qwen2.5-0.5B/1.5B via Transformers or llama.cpp).
-   - Paired with strict hallucination checks; disabled by default to ensure real-time CPU performance.
+   - Optional text-generation prototype using Qwen2.5-0.5B-Instruct through Transformers. The current implementation does not implement quantization or a llama.cpp backend.
+   - Not selectable in the demo UI. Loading the optional model may require network access and additional dependencies.
 
 ---
 

@@ -38,7 +38,7 @@ VisionGuard Lite incorporates three distinct dataset representations across its 
 - **License**: CC BY-NC-SA 4.0 (Non-Commercial, ShareAlike).
 - **Extractor Schema**: YOLOv8x + ViTPose-H (COCO-17 landmark representation).
 - **Integration**:
-  - VisionGuard Lite includes [`download_real_safer.py`](download_real_safer.py) and [`src/data/safer_real_pipeline.py`](src/data/safer_real_pipeline.py) for automated ingestion once maintainer authorization is approved.
+  - VisionGuard Lite includes [`scripts/download_real_safer.py`](../scripts/download_real_safer.py) and [`src/data/safer_real_pipeline.py`](../src/data/safer_real_pipeline.py) for automated ingestion once maintainer authorization is approved.
 
 ---
 

@@ -13,6 +13,7 @@ import os
 import sys
 import time
 import argparse
+import tempfile
 from pathlib import Path
 from typing import Tuple, Dict, Any, Optional, List
 
@@ -24,7 +25,7 @@ if str(REPO_ROOT) not in sys.path:
 # Ensure matplotlib runs headlessly without X11
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 
 import cv2
 import psutil
@@ -36,7 +37,6 @@ import gradio as gr
 from src.models.temporal_cnn import TemporalCNN
 from src.data.pose_schema_audit import PoseSchemaAuditor
 from src.data.preprocessing import PosePreprocessor
-from src.evaluation.uncertainty import UncertaintyPolicy
 from src.inference.mediapipe_extractor import MediaPipePoseExtractor
 from src.inference.slm_explainer import TemplateExplainer, EvidenceConsistencyChecker
 
@@ -103,6 +103,27 @@ class PipelineManager:
 
 manager = PipelineManager()
 
+def confirm_windows(probabilities, times, threshold, k):
+    """Confirm consecutive positives; delay starts at the current positive run."""
+    states = []
+    run_start = None
+    delay = None
+    count = 0
+    for probability, timestamp in zip(probabilities, times):
+        if probability >= threshold:
+            if count == 0:
+                run_start = timestamp
+            count += 1
+        else:
+            count = 0
+            run_start = None
+        confirmed = count >= k
+        states.append(int(confirmed))
+        if confirmed and delay is None:
+            delay = round(timestamp - run_start, 2)
+    return states, delay
+
+
 def process_video_pipeline(
     video_path: Optional[str],
     confirmation_k: int = 2,
@@ -118,32 +139,44 @@ def process_video_pipeline(
     5. Calibrated inference with temporal confirmation
     6. Grounded explanation & telemetry generation
     """
-    if not video_path or not os.path.exists(video_path):
+    if not video_path or not os.path.isfile(video_path):
         return None, None, "[WARNING] Please upload a valid video file or record a clip via webcam.", {
             "Status": "Invalid Input",
             "Error": "No video file received"
         }
 
+    if (isinstance(confirmation_k, bool) or not isinstance(confirmation_k, (int, float))
+            or confirmation_k not in (1, 2, 3, 4)
+            or not isinstance(confidence_thresh, (int, float))
+            or not np.isfinite(confidence_thresh) or not 0.20 <= confidence_thresh <= 0.90
+            or backend_choice not in ("ONNX Runtime (Fastest / Recommended)", "PyTorch (CPU)")):
+        return None, None, "[WARNING] Choose valid analysis settings.", {"Status": "Invalid Settings"}
+    confirmation_k = int(confirmation_k)
     t_start = time.perf_counter()
     backend = "onnx" if "ONNX" in backend_choice else "pytorch"
 
     # Step 1: MediaPipe Pose Extraction
     t_pose0 = time.perf_counter()
+    extractor = None
     try:
         extractor = MediaPipePoseExtractor()
         extracted = extractor.extract_from_video(video_path, max_frames=250, target_fps=10.0)
-        extractor.close()
     except Exception as e:
         return None, None, f"[ERROR] Pose extraction error: {str(e)}", {"Status": "Extraction Failure", "Error": str(e)}
+
+    finally:
+        if extractor is not None:
+            extractor.close()
 
     t_pose_ms = (time.perf_counter() - t_pose0) * 1000.0
     raw_lms = extracted["landmarks"] # (T, 33, 4)
     annotated_frames = extracted["annotated_frames"]
     duration_sec = extracted["duration_sec"]
     num_frames = extracted["frame_count"]
+    sampling_fps = extracted["fps"]
 
     if num_frames < 10:
-        return None, None, "[WARNING] Video sequence is too short (< 10 frames). Please provide a recording of at least 1.5 seconds.", {
+        return None, None, "[WARNING] Video sequence is too short (< 10 frames). Please provide a longer recording with a clearly visible person.", {
             "Status": "Video Too Short",
             "Frames Detected": num_frames
         }
@@ -157,6 +190,7 @@ def process_video_pipeline(
     stride = 5 # 0.5s stride
     windows_51 = []
     window_times = []
+    window_visibility = []
 
     if num_frames < window_size:
         pad_len = window_size - num_frames
@@ -165,6 +199,7 @@ def process_video_pipeline(
         norm_w = manager.preprocessor.normalize_skeleton(padded_kps)
         w_51 = norm_w.reshape(1, window_size, 17 * 3).transpose(0, 2, 1)
         windows_51.append(w_51)
+        window_visibility.append(mean_visibility)
         window_times.append(duration_sec)
     else:
         for s in range(0, num_frames - window_size + 1, stride):
@@ -172,7 +207,8 @@ def process_video_pipeline(
             norm_w = manager.preprocessor.normalize_skeleton(coco_kps[s:e])
             w_51 = norm_w.reshape(1, window_size, 17 * 3).transpose(0, 2, 1)
             windows_51.append(w_51)
-            window_times.append(round(e / 10.0, 2))
+            window_visibility.append(float(np.mean(coco_kps[s:e, :, 2])))
+            window_times.append(e / sampling_fps)
 
     W = len(windows_51)
     if W == 0:
@@ -187,24 +223,10 @@ def process_video_pipeline(
     t_infer_ms = (time.perf_counter() - t_infer0) * 1000.0 / max(1, W)
 
     # Step 5: Temporal Confirmation State Machine
-    confirmed_state = []
-    consecutive_positives = 0
-    first_fall_time = None
-    confirmation_delay_sec = None
-
-    for i, p in enumerate(raw_probs):
-        if p >= confidence_thresh:
-            consecutive_positives += 1
-            if first_fall_time is None:
-                first_fall_time = window_times[i]
-        else:
-            consecutive_positives = 0
-
-        is_confirmed = (consecutive_positives >= confirmation_k)
-        confirmed_state.append(1 if is_confirmed else 0)
-
-        if is_confirmed and confirmation_delay_sec is None and first_fall_time is not None:
-            confirmation_delay_sec = round(max(0.0, window_times[i] - first_fall_time), 2)
+    confirmed_state, confirmation_delay_sec = confirm_windows(
+        [p if visibility >= 0.50 else -1.0 for p, visibility in zip(raw_probs, window_visibility)],
+        window_times, confidence_thresh, confirmation_k
+    )
 
     peak_prob = float(np.max(raw_probs))
     avg_prob = float(np.mean(raw_probs))
@@ -213,22 +235,21 @@ def process_video_pipeline(
     is_uncertain = (0.35 <= peak_prob < confidence_thresh) or (mean_visibility < 0.50)
 
     # State decision
-    if has_confirmed_fall:
+    if mean_visibility < 0.50:
+        final_state = "UNCERTAIN / LOW TRACKING CONFIDENCE"
+        activity_label = "possible_fall"
+    elif has_confirmed_fall:
         final_state = "CONFIRMED FALL EVENT"
         activity_label = "fall"
-        state_color = (0, 0, 220)
     elif has_raw_spike:
         final_state = "UNCONFIRMED SPIKE (Filtered by K-Window Policy)"
         activity_label = "possible_fall"
-        state_color = (0, 140, 255)
     elif is_uncertain:
         final_state = "UNCERTAIN / LOW TRACKING CONFIDENCE"
         activity_label = "possible_fall"
-        state_color = (0, 165, 255)
     else:
         final_state = "NORMAL ACTIVITY"
         activity_label = "normal"
-        state_color = (0, 200, 0)
 
     confidence_score = peak_prob if (has_confirmed_fall or has_raw_spike) else (1.0 - avg_prob)
 
@@ -246,43 +267,64 @@ def process_video_pipeline(
     safety_check = EvidenceConsistencyChecker.validate(evidence, explanation_res["explanation"])
 
     # Step 7: Render Multi-Signal Timeline Visualization
-    plt.figure(figsize=(8.5, 3.4), dpi=130)
-    plt.plot(window_times, raw_probs, 'b-o', linewidth=2.2, markersize=5, label='Calibrated Fall Probability (P)')
+    output_dir = Path(tempfile.mkdtemp(prefix="visionguard-"))
+    fig = Figure(figsize=(9, 3.6), dpi=130, layout="constrained")
+    ax = fig.subplots()
+    ax.plot(window_times, raw_probs, 'b-o', linewidth=2.2, markersize=5, label='Calibrated Fall Probability (P)')
     
     # Fill confirmed region
     confirmed_np = np.array(confirmed_state)
     if np.any(confirmed_np == 1):
-        plt.fill_between(window_times, 0, 1.05, where=(confirmed_np == 1), color='red', alpha=0.18, label=f'Confirmed Fall Zone (K={confirmation_k})')
+        ax.fill_between(window_times, 0, 1.05, where=(confirmed_np == 1), color='red', alpha=0.18, label=f'Confirmed Fall Zone (K={confirmation_k})')
 
-    plt.axhline(confidence_thresh, color='crimson', linestyle='--', linewidth=1.5, label=f'Fall Threshold ({confidence_thresh:.2f})')
-    plt.axhline(0.35, color='darkorange', linestyle=':', linewidth=1.4, label='Uncertainty Boundary (0.35)')
-    plt.ylim(-0.05, 1.05)
-    plt.xlim(0, max(duration_sec, window_times[-1] if window_times else 1.0))
-    plt.xlabel('Video Time (seconds)', fontsize=10)
-    plt.ylabel('Fall Probability', fontsize=10)
-    plt.title(f'Temporal Fall Trajectory (Model: GMDCSA-24 TemporalCNN | Backend: {backend.upper()})', fontsize=11, fontweight='bold')
-    plt.legend(loc='upper left', fontsize=8, framealpha=0.85)
-    plt.grid(True, linestyle='--', alpha=0.4)
-    plt.tight_layout()
+    ax.axhline(confidence_thresh, color='crimson', linestyle='--', linewidth=1.5, label=f'Fall Threshold ({confidence_thresh:.2f})')
+    ax.axhline(0.35, color='darkorange', linestyle=':', linewidth=1.4, label='Uncertainty Boundary (0.35)')
+    ax.set_ylim(-0.05, 1.05)
+    ax.set_xlim(0, max(duration_sec, window_times[-1] if window_times else 1.0))
+    ax.set_xlabel('Video Time (seconds)', fontsize=10)
+    ax.set_ylabel('Fall Probability', fontsize=10)
+    ax.set_title(f'Temporal Fall Trajectory (Model: GMDCSA-24 TemporalCNN | Backend: {backend.upper()})', fontsize=11, fontweight='bold')
+    ax.legend(loc='upper left', fontsize=8, framealpha=0.85)
+    ax.grid(True, linestyle='--', alpha=0.4)
 
-    timeline_img_path = str(REPO_ROOT / "demo/temp_timeline.png")
-    plt.savefig(timeline_img_path)
-    plt.close()
+    timeline_img_path = str(output_dir / "timeline.png")
+    fig.savefig(timeline_img_path)
 
     # Step 8: Render Output Annotated Video
-    out_video_path = str(REPO_ROOT / "demo/annotated_output.mp4")
+    out_video_path = str(output_dir / "annotated.mp4")
     if len(annotated_frames) > 0:
         h, w, _ = annotated_frames[0].shape
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        vw = cv2.VideoWriter(out_video_path, fourcc, 10, (w, h))
-        for idx, f in enumerate(annotated_frames):
-            t_cur = idx / 10.0
-            # Frame banner
-            cv2.rectangle(f, (10, 10), (w - 10, 50), (25, 25, 25), -1)
-            status_str = f"STATUS: {final_state.split()[1]} | VIS: {mean_visibility:.0%} | T: {t_cur:.1f}s"
-            cv2.putText(f, status_str, (20, 38), cv2.FONT_HERSHEY_SIMPLEX, 0.65, state_color, 2)
-            vw.write(f)
-        vw.release()
+        vw = cv2.VideoWriter(out_video_path, fourcc, sampling_fps, (w, h))
+        if not vw.isOpened():
+            vw.release()
+            return None, timeline_img_path, "[ERROR] Could not encode the annotated video.", {"Status": "Output Failure"}
+        try:
+            for idx, f in enumerate(annotated_frames):
+                t_cur = (idx + 1) / sampling_fps
+                available = [i for i, t in enumerate(window_times) if t <= t_cur]
+                if not available:
+                    frame_state, color = "COLLECTING POSE", (220, 220, 220)
+                else:
+                    i = available[-1]
+                    if window_visibility[i] < 0.50:
+                        frame_state, color = "UNCERTAIN TRACKING", (0, 165, 255)
+                    elif confirmed_state[i]:
+                        frame_state, color = "CONFIRMED FALL", (0, 0, 220)
+                    elif raw_probs[i] >= confidence_thresh:
+                        frame_state, color = "UNCONFIRMED SPIKE", (0, 140, 255)
+                    elif mean_visibility < 0.50 or raw_probs[i] >= 0.35:
+                        frame_state, color = "UNCERTAIN", (0, 165, 255)
+                    else:
+                        frame_state, color = "NORMAL ACTIVITY", (0, 200, 0)
+                cv2.rectangle(f, (10, 10), (w - 10, 50), (25, 25, 25), -1)
+                status_str = f"{frame_state} | T: {t_cur:.1f}s"
+                cv2.putText(f, status_str, (20, 38), cv2.FONT_HERSHEY_SIMPLEX, 0.55, color, 2)
+                vw.write(f)
+        finally:
+            vw.release()
+    else:
+        return None, timeline_img_path, "[ERROR] No video frames available.", {"Status": "Output Failure"}
 
     total_time_ms = (time.perf_counter() - t_start) * 1000.0
     effective_fps = num_frames / max(0.001, total_time_ms / 1000.0)
@@ -295,8 +337,10 @@ def process_video_pipeline(
         "Peak Fall Probability": f"{peak_prob:.1%}",
         "Mean Landmark Visibility": f"{mean_visibility:.1%}",
         "Temporal Windows Analyzed": W,
+        "Windows With Usable Tracking": sum(v >= 0.50 for v in window_visibility),
+        "Analyzed Duration": f"{duration_sec:.1f} s (up to 250 sampled frames)",
         "Temporal Confirmation Setting": f"K = {confirmation_k} consecutive windows",
-        "Physical Fall Delay": f"{confirmation_delay_sec} s" if confirmation_delay_sec is not None else "N/A (No sustained fall)",
+        "Confirmation Policy Delay": f"{confirmation_delay_sec} s" if confirmation_delay_sec is not None else "N/A (No sustained fall)",
         "Per-Window Inference Time": f"{t_infer_ms:.2f} ms",
         "Pose Extraction Time": f"{t_pose_ms:.1f} ms",
         "Total Pipeline Latency": f"{total_time_ms:.1f} ms",
@@ -308,100 +352,9 @@ def process_video_pipeline(
     return out_video_path, timeline_img_path, explanation_res["explanation"], metrics
 
 def build_app():
-    sample_vid = str(REPO_ROOT / "demo/sample_activity.mp4")
-    real_sample_fall = str(REPO_ROOT / "experiments/gmdcsa24_real/data/raw/gmdcsa24/Subject 1/Fall/01.mp4")
-    
-    examples_list = []
-    if os.path.exists(sample_vid):
-        examples_list.append([sample_vid, 2, 0.50, "ONNX Runtime (Fastest / Recommended)"])
-    if os.path.exists(real_sample_fall):
-        examples_list.append([real_sample_fall, 2, 0.50, "ONNX Runtime (Fastest / Recommended)"])
+    from demo.ui import build_interface
+    return build_interface(process_video_pipeline, REPO_ROOT)
 
-    custom_theme = gr.themes.Soft(
-        primary_hue="blue",
-        neutral_hue="slate"
-    )
-
-    with gr.Blocks(title="VisionGuard Lite: Edge Fall Detection") as demo:
-        gr.Markdown(
-            """
-            # VisionGuard Lite: Uncertainty-Aware Pose Fall Detection
-            **Edge-Deployable Human Fall Recognition and Calibration Demonstration**  
-            *CPU-First Computer Vision Architecture with Post-Hoc Calibration, Temporal Confirmation, and Grounded Explanations.*
-            """
-        )
-
-        gr.Markdown(
-            """
-            > **Scientific Integrity and Dataset Disclosure**:
-            > This demonstration runs the **real-data model** trained on the open-access **GMDCSA-24 dataset** (PMC11416611) across 4 human participants under Leave-One-Subject-Out (LOSO) cross-validation.
-            > - **False Alarm Frequency**: In continuous unconfirmed monitoring, isolated window false alarms occur at **~132.4 false alarms/hour** (approximately once every **27.2 seconds**). 
-            > - **Temporal Confirmation**: Requiring $K \\ge 2$ consecutive positive windows suppresses transient activity spikes (rapid sitting, bending).
-            > - **Clinical Notice**: Staged falls in laboratory conditions. Not certified for emergency medical use or unsupervised clinical deployment.
-            """
-        )
-
-        with gr.Row():
-            with gr.Column(scale=5):
-                video_input = gr.Video(
-                    label="Input Video Source (Upload Video File or Record via Webcam)",
-                    sources=["upload", "webcam"]
-                )
-                
-                with gr.Accordion("Pipeline Parameters", open=True):
-                    with gr.Row():
-                        backend_selector = gr.Dropdown(
-                            label="Classifier Runtime Backend",
-                            choices=["ONNX Runtime (Fastest / Recommended)", "PyTorch (CPU)"],
-                            value="ONNX Runtime (Fastest / Recommended)"
-                        )
-                        confirmation_slider = gr.Slider(
-                            minimum=1,
-                            maximum=4,
-                            value=2,
-                            step=1,
-                            label="Temporal Confirmation Windows (K)",
-                            info="K=1: Unfiltered / raw. K=2: Confirmed alert (reduces false alarms)."
-                        )
-                        thresh_slider = gr.Slider(
-                            minimum=0.20,
-                            maximum=0.90,
-                            value=0.50,
-                            step=0.05,
-                            label="Decision Confidence Threshold",
-                            info="Calibrated probability threshold for positive fall trigger."
-                        )
-
-                run_btn = gr.Button("Run Temporal Fall Analysis", variant="primary", size="lg")
-
-                if examples_list:
-                    gr.Examples(
-                        examples=examples_list,
-                        inputs=[video_input, confirmation_slider, thresh_slider, backend_selector],
-                        label="Representative Example Activity Videos"
-                    )
-
-            with gr.Column(scale=5):
-                annotated_video = gr.Video(label="Annotated Pose Tracking Output")
-                timeline_plot = gr.Image(label="Temporal Activity Probability Trajectory")
-
-        with gr.Row():
-            with gr.Column(scale=5):
-                explanation_box = gr.Textbox(
-                    label="Evidence-Grounded Explanation (Local Rule Engine / Optional SLM)",
-                    lines=3,
-                    interactive=False
-                )
-            with gr.Column(scale=5):
-                telemetry_box = gr.JSON(label="Edge Telemetry and Performance Diagnostics")
-
-        run_btn.click(
-            fn=process_video_pipeline,
-            inputs=[video_input, confirmation_slider, thresh_slider, backend_selector],
-            outputs=[annotated_video, timeline_plot, explanation_box, telemetry_box]
-        )
-
-    return demo
 
 def main():
     parser = argparse.ArgumentParser(description="VisionGuard Lite Web Application")
@@ -412,7 +365,10 @@ def main():
 
     demo = build_app()
     print(f"Starting VisionGuard Lite on http://{args.host}:{args.port} (share={args.share})...")
-    demo.launch(server_name=args.host, server_port=args.port, share=args.share)
+    # Gradio 6 moved theme and CSS from Blocks to launch.
+    from demo.ui import interface_style
+    style = interface_style() if int(gr.__version__.split(".")[0]) >= 6 else {}
+    demo.launch(server_name=args.host, server_port=args.port, share=args.share, **style)
 
 if __name__ == "__main__":
     main()

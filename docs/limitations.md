@@ -18,12 +18,12 @@ VisionGuard Lite is an open-source academic research demonstration and baseline 
   - Rapid transitions (e.g., throwing oneself onto a sofa or bed).
   - Vigorous floor-level exercises (stretching, yoga, push-ups).
   - Reaching rapidly down to pick up dropped items.
-- **Temporal Confirmation Trade-Off**: Requiring $K=2$ consecutive positive windows suppresses false alarms to **95.00 FA/hr** while maintaining **92.2% event recall**, but introduces a **2.18-second mean confirmation delay**. Requiring $K=4$ reduces false alarms to 83.75 FA/hr at the cost of missing 29.9% of falls (70.1% recall) and a 3.14-second delay.
+- **Temporal Confirmation Trade-Off**: Requiring $K=2$ consecutive positive windows suppresses false alarms to **95.00 FA/hr** while maintaining **92.2% event recall**, but introduces a **2.18-second mean physical detection delay in the historical evaluation**. Requiring $K=4$ reduces false alarms to 83.80 FA/hr at the cost of missing 29.9% of falls (70.1% recall) and a 3.14-second delay.
 
 ---
 
 ## 3. Potential for Missed Falls (False Negatives)
-- **Occlusions**: When more than 40% of landmarks are obscured (e.g. subject falling behind a bed, table, or low wall), posture estimation fails because the reference hip center cannot be accurately triangulated.
+- **Occlusions**: Obscured landmarks, such as a person falling behind furniture, can make pose estimation unreliable. The demo rejects low-visibility confirmation windows, but this does not guarantee that tracking failures will always be detected.
 - **Gradual Slumps**: Slow, assisted slips down a wall or furniture may exhibit low vertical velocity, which can fail to cross the temporal convolution activation threshold.
 
 ---
@@ -31,7 +31,7 @@ VisionGuard Lite is an open-source academic research demonstration and baseline 
 ## 4. Hardware & Benchmark Distinction
 - **Server vs Consumer CPU**: Colab benchmarks running on multi-core cloud instances (Intel Xeon / AMD EPYC) or server GPUs do not reflect consumer laptop constraints.
 - **Thermal & Battery Throttling**: On portable battery-powered laptops or edge boards (Raspberry Pi, low-power NUCs), thermal throttling and background OS tasks can increase MediaPipe frame processing latency from 23 ms to > 60 ms.
-- **Mobile Claims**: Desktop CPU benchmarks do not constitute verification on mobile architectures (ARM NEON / Android NPU). Mobile deployment requires separate on-device validation using the provided ONNX Android blueprints.
+- **Mobile Claims**: Desktop CPU benchmarks do not constitute verification on mobile architectures (ARM NEON / Android NPU). Mobile deployment requires separate integration and on-device validation; this repository does not provide a validated mobile application.
 
 ---
 
@@ -42,3 +42,12 @@ VisionGuard Lite is an open-source academic research demonstration and baseline 
 > - VisionGuard Lite is **not** certified by the FDA, CE, or any regulatory body as a medical diagnostic or emergency life-safety device.
 > - **Never** rely on this software as the sole mechanism for elderly care, critical patient monitoring, or automated emergency services dispatch.
 > - The software is provided "as is", without warranty of any kind, strictly for academic and research evaluation.
+
+
+## 6. Demo scope and retention
+
+The interface analyzes bounded clips, targeting 10 FPS and stopping at 250 sampled frames. Actual sampling rate depends on source FPS, and repeated-pose padding is used for short clips. These behaviors can change the temporal context seen by the model.
+
+Low mean pose visibility forces an uncertain clip summary. A confirmation only means the configured model policy was met, not that a physical fall or injury was independently verified. Classifier probabilities can remain high even when no person is tracked.
+
+Uploaded video and generated files are stored on the app host. Per-run pipeline artifacts use the system temporary directory and do not have an application-enforced secure-deletion policy. Do not expose the default unauthenticated app to untrusted users. See [architecture](architecture.md) and [setup](setup.md).

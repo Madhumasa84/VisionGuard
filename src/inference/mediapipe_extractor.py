@@ -63,63 +63,66 @@ class MediaPipePoseExtractor:
         if not cap.isOpened():
             raise ValueError(f"Could not open video file: {video_path}")
 
-        orig_fps = cap.get(cv2.CAP_PROP_FPS)
-        if orig_fps <= 0 or np.isnan(orig_fps):
-            orig_fps = 30.0
+        try:
+            orig_fps = cap.get(cv2.CAP_PROP_FPS)
+            if orig_fps <= 0 or np.isnan(orig_fps):
+                orig_fps = 30.0
 
-        step = max(1, int(round(orig_fps / target_fps)))
+            step = max(1, int(round(orig_fps / target_fps)))
         
-        all_landmarks = []
-        annotated_frames = []
-        frame_idx = 0
+            all_landmarks = []
+            annotated_frames = []
+            frame_idx = 0
 
-        while cap.isOpened() and len(annotated_frames) < max_frames:
-            ret, frame = cap.read()
-            if not ret:
-                break
+            while cap.isOpened() and len(annotated_frames) < max_frames:
+                ret, frame = cap.read()
+                if not ret:
+                    break
 
-            if frame_idx % step == 0:
-                h, w, _ = frame.shape
-                rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
-                detection_result = self.detector.detect(mp_image)
+                if frame_idx % step == 0:
+                    h, w, _ = frame.shape
+                    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
+                    detection_result = self.detector.detect(mp_image)
 
-                frame_kps = np.zeros((33, 4), dtype=np.float32)
-                annotated = frame.copy()
+                    frame_kps = np.zeros((33, 4), dtype=np.float32)
+                    annotated = frame.copy()
 
-                if detection_result.pose_landmarks and len(detection_result.pose_landmarks) > 0:
-                    lms = detection_result.pose_landmarks[0]
-                    for j_idx, lm in enumerate(lms):
-                        frame_kps[j_idx] = [lm.x, lm.y, lm.z, getattr(lm, 'visibility', 0.9)]
-                        px, py = int(lm.x * w), int(lm.y * h)
-                        if 0 <= px < w and 0 <= py < h:
-                            cv2.circle(annotated, (px, py), 3, (0, 255, 0), -1)
+                    if detection_result.pose_landmarks and len(detection_result.pose_landmarks) > 0:
+                        lms = detection_result.pose_landmarks[0]
+                        for j_idx, lm in enumerate(lms):
+                            frame_kps[j_idx] = [lm.x, lm.y, lm.z, getattr(lm, 'visibility', 0.9)]
+                            px, py = int(lm.x * w), int(lm.y * h)
+                            if 0 <= px < w and 0 <= py < h:
+                                cv2.circle(annotated, (px, py), 3, (0, 255, 0), -1)
 
-                    for j1, j2 in MEDIAPIPE_SKELETON_EDGES:
-                        if j1 < len(lms) and j2 < len(lms):
-                            p1 = (int(lms[j1].x * w), int(lms[j1].y * h))
-                            p2 = (int(lms[j2].x * w), int(lms[j2].y * h))
-                            if 0 <= p1[0] < w and 0 <= p1[1] < h and 0 <= p2[0] < w and 0 <= p2[1] < h:
-                                cv2.line(annotated, p1, p2, (255, 120, 0), 2)
-                else:
-                    # Heuristic fallback if frame has motion/figure
-                    pass
+                        for j1, j2 in MEDIAPIPE_SKELETON_EDGES:
+                            if j1 < len(lms) and j2 < len(lms):
+                                p1 = (int(lms[j1].x * w), int(lms[j1].y * h))
+                                p2 = (int(lms[j2].x * w), int(lms[j2].y * h))
+                                if 0 <= p1[0] < w and 0 <= p1[1] < h and 0 <= p2[0] < w and 0 <= p2[1] < h:
+                                    cv2.line(annotated, p1, p2, (255, 120, 0), 2)
+                    else:
+                        # Heuristic fallback if frame has motion/figure
+                        pass
 
-                all_landmarks.append(frame_kps)
-                annotated_frames.append(annotated)
+                    all_landmarks.append(frame_kps)
+                    annotated_frames.append(annotated)
 
-            frame_idx += 1
+                frame_idx += 1
 
-        cap.release()
+        finally:
+            cap.release()
 
         landmarks_arr = np.array(all_landmarks, dtype=np.float32) if len(all_landmarks) > 0 else np.zeros((0, 33, 4))
-        duration = len(annotated_frames) / float(target_fps) if len(annotated_frames) > 0 else 0.0
+        sampled_fps = orig_fps / step
+        duration = len(annotated_frames) / sampled_fps if annotated_frames else 0.0
 
         return {
             'landmarks': landmarks_arr,
             'annotated_frames': annotated_frames,
             'frame_count': len(annotated_frames),
-            'fps': target_fps,
+            'fps': sampled_fps,
             'duration_sec': duration
         }
 

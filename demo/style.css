@@ -1,0 +1,47 @@
+/* Use Gradio's theme variables to preserve light/dark mode and native controls. */
+.gradio-container { box-sizing: border-box; width: 100% !important; min-width: 0 !important; max-width: 1280px !important; margin: auto; padding: clamp(18px, 2.2vw, 28px) clamp(14px, 2.8vw, 36px) !important; }
+.gradio-container > .main, .gradio-container > .main > .wrap { padding: 0 !important; min-width: 0 !important; width: 100%; }
+.app-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding-bottom: 24px; border-bottom: 1px solid var(--border-color-primary); gap: 16px; }
+.brand { display: flex; gap: 12px; align-items: center; font-size: 21px; font-weight: 700; letter-spacing: -.6px; color: var(--body-text-color); }
+.brand-lite { font-weight: 400; color: var(--body-text-color-subdued); }
+.brand small { display: block; font-size: 9px; letter-spacing: 2px; font-weight: 600; margin-top: 4px; color: var(--body-text-color-subdued); }
+.brand-mark { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; flex-shrink: 0; background: #0f766e; border-radius: 12px; color: white; font-size: 24px; }
+.brand-mark span { color: #99f6e4; }
+.local-badge { font-size: 12px; padding: 8px 12px; border: 1px solid var(--border-color-primary); border-radius: 30px; color: var(--body-text-color); white-space: nowrap; }
+.local-badge span { color: #0d9488; margin-right: 5px; }
+.hero { display: flex; justify-content: space-between; align-items: center; gap: 32px; padding: 38px 0 30px; }
+.eyebrow { color: var(--body-text-color-subdued); font-size: 10px; letter-spacing: 1.8px; font-weight: 700; }
+.hero h1 { font-size: clamp(28px, 3.3vw, 42px); line-height: 1.18; letter-spacing: -1.5px; margin: 12px 0; font-weight: 650; color: var(--body-text-color); }
+.hero p { font-size: 15px; line-height: 1.7; max-width: 570px; color: var(--body-text-color-subdued); margin: 0; }
+.hero-note { border-left: 2px solid #0d9488; padding-left: 20px; min-width: 215px; }
+.hero-note strong, .hero-note span { display: block; font-size: 13px; color: var(--body-text-color); line-height: 1.8; }
+.hero-note span { font-size: 12px; color: var(--body-text-color-subdued); }
+#safety-notice { padding: 12px 16px; border: 1px solid var(--border-color-primary); border-left: 3px solid #b7791f; border-radius: 8px; margin-bottom: 14px; }
+#safety-notice p { font-size: 12px; line-height: 1.7; }
+#workspace { gap: 22px; align-items: flex-start; }
+.workspace-panel { padding: 22px !important; border: 1px solid var(--border-color-primary); border-radius: 14px; background: var(--block-background-fill); }
+.workspace-panel h3 { font-size: 17px !important; letter-spacing: -.3px; }
+.helper-copy p { font-size: 12px !important; color: var(--body-text-color-subdued); line-height: 1.7; }
+#analyze-button { min-height: 48px; font-weight: 650; }
+.result-summary { padding: 2px 0 20px; border-bottom: 1px solid var(--border-color-primary); margin-bottom: 8px; }
+.result-summary h2 { font-size: 20px; line-height: 1.4; margin: 10px 0; font-weight: 650; letter-spacing: -.4px; color: var(--body-text-color); overflow-wrap: anywhere; }
+.result-summary p { color: var(--body-text-color-subdued); font-size: 13px; line-height: 1.7; }
+.result-summary.alert { border-bottom: 3px solid #dc2626; }
+.result-summary.review { border-bottom: 3px solid #b7791f; }
+.result-summary.normal { border-bottom: 3px solid #0d9488; }
+.metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+.metric-grid span { display: block; color: var(--body-text-color-subdued); font-size: 11px; line-height: 1.5; }
+.metric-grid strong { display: block; color: var(--body-text-color); font-size: 22px; font-weight: 600; margin-top: 6px; }
+#model-notes { margin-top: 12px; }
+.app-footer { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--border-color-primary); padding: 22px 0 8px; margin-top: 20px; color: var(--body-text-color-subdued); font-size: 11px; }
+button:focus-visible, a:focus-visible { outline: 3px solid #0d9488 !important; outline-offset: 3px; }
+@media (max-width: 700px) {
+  .hero { padding: 26px 0 22px; }
+  .hero-note { display: none; }
+  .workspace-panel { padding: 16px !important; min-width: 0 !important; }
+  #workspace { flex-direction: column; }
+  .metric-grid { gap: 8px; }
+  .metric-grid strong { font-size: 18px; }
+  .app-footer { flex-direction: column; gap: 6px; }
+  .local-badge { font-size: 10px; padding: 6px 9px; }
+}

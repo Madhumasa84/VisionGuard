@@ -1,192 +1,172 @@
-# VisionGuard Lite: CPU-First Uncertainty-Aware Fall Detection
+# VisionGuard Lite
 
-VisionGuard Lite is an open-source, edge-deployable computer vision framework for privacy-preserving human activity recognition and fall detection. The system is engineered specifically for commodity CPU hardware, incorporating post-hoc probability calibration (temperature scaling), selective prediction, temporal confirmation state filtering, and evidence-grounded natural language explanations.
+CPU-based fall-detection research from human pose sequences. Analyze a recorded video or webcam clip with a lightweight temporal classifier, inspect its probability timeline, and review an explanation that acknowledges uncertainty.
 
-![VisionGuard Lite Demonstration Preview](docs/demo_preview.png)
+[![Tests](https://github.com/Madhumasa84/Edge_fall/actions/workflows/tests.yml/badge.svg)](https://github.com/Madhumasa84/Edge_fall/actions/workflows/tests.yml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
----
+**Research software, not a medical device.** The model can miss falls and produce frequent false alerts. It has not been validated for clinical use, emergency dispatch, or unsupervised safety monitoring. See [limitations](docs/limitations.md).
 
-## Quickstart
+![VisionGuard Lite video analysis workspace](docs/assets/demo-preview.png)
 
-### Windows (PowerShell)
+## Overview
 
-```powershell
-# Set up Python virtual environment and CPU dependencies
-.\scripts\setup_windows.ps1
+- **Local CPU inference:** ONNX Runtime by default, with a PyTorch CPU backend for comparison. No hosted inference API is required.
+- **Pose-based classification:** MediaPipe landmarks are mapped to COCO-17, normalized, and analyzed by a 66,274-parameter TemporalCNN.
+- **Explicit uncertainty:** Temperature scaling, tracking-quality checks, and consecutive-window confirmation help distinguish model predictions from reliable evidence.
+- **Reviewable results:** Annotated playback, a probability timeline, an evidence summary, and performance diagnostics in a responsive Gradio interface.
+- **Reproducible research:** Bundled model artifacts, subject-separated experiment outputs, and automated unit and integration tests.
 
-# Launch local Gradio demonstration interface
-.\scripts\run_local.ps1
-```
+## Quick start
 
-### Linux and macOS (Bash)
+Requires Python 3.10 or later. Install FFmpeg for browser-compatible video conversion. On Linux, MediaPipe may also require system EGL/GLES libraries; see [setup and troubleshooting](docs/setup.md).
+
+### Linux and macOS
 
 ```bash
-# Create virtual environment and install CPU dependencies
+git clone https://github.com/Madhumasa84/Edge_fall.git
+cd Edge_fall
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements-local.txt
-
-# Launch local Gradio demonstration interface
+python -m pip install -r requirements-local.txt
 ./scripts/run_local.sh
 ```
 
-Once running, navigate to `http://127.0.0.1:7860` in any modern web browser. The server binds strictly to `127.0.0.1` and does not generate public tunnels.
+### Windows PowerShell
 
----
+```powershell
+git clone https://github.com/Madhumasa84/Edge_fall.git
+cd Edge_fall
+.\scripts\setup_windows.ps1
+.\scripts\run_local.ps1
+```
 
-## System Architecture
+Open **http://127.0.0.1:7860**. The launcher binds to the loopback address and leaves public sharing disabled by default.
+
+1. Upload an H.264 MP4 or WebM, record a webcam clip, or choose an example.
+2. Keep the default threshold of **0.50** and confirmation setting of **K=2** to start.
+3. Select **Analyze video** and inspect the summary, annotated playback, and timeline.
+4. Review pose visibility and uncertainty before interpreting a model prediction.
+
+The demo processes up to **250 sampled frames**, targeting 10 FPS (approximately 25 seconds). Webcam input records a clip; it does not provide continuous live monitoring. Uploaded videos are processed on the host running the app, and generated outputs are written to the system temporary directory. Raw footage remains part of the local workflow; pose-based inference does not make uploaded video anonymous.
+
+## Architecture
 
 ```mermaid
-flowchart LR
-    A["Video / Webcam (10 FPS)"] --> B["MediaPipe Tasks (33 Keypoints)"]
-    B --> C["PoseSchemaAuditor (COCO-17 Mapping)"]
-    C --> D["PosePreprocessor (Hip Centered, Torso Scaled)"]
-    D --> E["TemporalCNN (1D Conv, ONNX Runtime)"]
-    E --> F["Temperature Scaling (T = 1.627)"]
-    F --> G["Temporal Confirmation (K >= 2 Windows)"]
-    G --> H["Grounded Explainer (Rule Engine)"]
-    H --> I["Gradio Interface (Video, Timeline, Diagnostics)"]
+flowchart TD
+    A["Video upload or recorded webcam clip"]
+    B["MediaPipe pose extraction · 33 landmarks"]
+    C["COCO-17 mapping and skeleton normalization"]
+    D["30-frame windows · 5-frame stride"]
+    E["TemporalCNN · ONNX Runtime or PyTorch CPU"]
+    F["Temperature-scaled fall probabilities"]
+    G["Tracking-quality gate and K-window confirmation"]
+    H["Evidence summary and consistency checks"]
+    I["Video review · probability timeline · diagnostics"]
+    A --> B --> C --> D --> E --> F --> G --> H --> I
 ```
 
-Key architectural principles:
-- **Strict Coordinate Isolation**: MediaPipe extracts 33 joints in normalized screen coordinates. `PoseSchemaAuditor` explicitly maps anatomically equivalent landmarks to COCO-17 before feeding the classifier, preventing representation corruption.
-- **Scale and Translation Invariance**: Skeletal sequences are centered on the mid-hip coordinate and scaled relative to torso length, ensuring robust classification regardless of subject position or camera distance.
-- **Dual Runtime Backends**: Supports both ONNX Runtime CPU (default, optimized) and PyTorch CPU execution.
-- **Two-Tier Explanation Architecture**: The local deployment defaults to a deterministic, rule-based explainer (`TemplateExplainer`) for instantaneous (<0.01 ms), zero-GPU operation. An optional autoregressive small language model (`QwenSLMExplainer` based on Qwen2.5-0.5B-Instruct) is cataloged as a research prototype. Both paths feed into an automated `EvidenceConsistencyChecker` to reject ungrounded medical claims.
+Windows with mean pose visibility below 50% cannot contribute to confirmation. Low clip-wide visibility produces an uncertain result even when the classifier probability is high. A confirmed event means the selected policy was satisfied; it does not verify a physical fall or injury.
 
-For detailed topological mappings, coordinate transformations, and dataflow diagrams, refer to [ARCHITECTURE.md](ARCHITECTURE.md).
+The displayed **confirmation policy delay** starts at the first positive window in the confirming run. It is distinct from delay measured against an annotated physical fall onset. The [architecture reference](docs/architecture.md) describes module ownership, data shapes, and decision rules.
 
----
+## Project structure
 
-## Scientific Integrity and Dataset Provenance
+```text
+Edge_fall/
+├── demo/                       # Gradio application and bundled example clip
+│   ├── app.py                  # Pipeline orchestration and local launcher
+│   ├── ui.py                   # Interface layout and result presentation
+│   └── style.css               # Responsive interface styles
+├── src/                        # Reusable Python implementation
+│   ├── data/                   # Schemas, ingestion, preprocessing, pose mapping
+│   ├── models/                 # TemporalCNN, BaselineMLP, and SmallTCN
+│   ├── inference/              # Pose extraction, ONNX export, explanations
+│   ├── evaluation/             # Metrics, calibration, CPU benchmarks
+│   └── training/               # Training loops and experiment orchestration
+├── tests/                      # Unit, regression, and integration tests
+├── scripts/                    # Setup, launch, test, and dataset utilities
+├── docs/                       # Setup, architecture, model, and dataset references
+│   ├── assets/                 # Documentation images
+│   └── reports/                # Historical audit and validation reports
+├── experiments/gmdcsa24_real/  # Real-data LOSO scripts and recorded results
+├── checkpoints/                # PyTorch weights and MediaPipe pose model
+├── exported_models/            # ONNX FP32 and INT8 artifacts
+├── datasets/                   # Synthetic fixtures and dataset working files
+├── results/                    # Recorded research outputs
+├── notebooks/                  # Exploratory Colab workflow and notebook generator
+├── lib/                        # Bundled Linux graphics compatibility libraries
+├── .github/workflows/          # Linux and Windows continuous integration
+├── pyproject.toml              # Package metadata and pytest configuration
+└── requirements*.txt           # Runtime and development dependencies
+```
 
-1. **Real Human Training Data (GMDCSA-24)**:
-   Models are trained and evaluated on the open-access GMDCSA-24 dataset (Alam et al., *Data in Brief* / PMC11416611, Zenodo: `10.5281/zenodo.13354453`). The benchmark comprises 160 video recordings across 4 participants evaluated under a strict 4-Fold Leave-One-Subject-Out (LOSO) cross-validation protocol, ensuring zero subject overlap across train, validation, and test splits.
+Runtime imports and model-artifact locations are stable. Research datasets and experiment outputs remain separate from the application. Raw human benchmark videos, credentials, virtual environments, and generated runtime files are excluded from version control.
 
-2. **False Alarm Frequency in Continuous Monitoring**:
-   In continuous unconfirmed monitoring, isolated window-level fall detectors produce approximately **132.4 false alarms per hour** (equivalent to one false alarm every 27.2 seconds). VisionGuard Lite addresses this with a **Temporal Confirmation Filter** ($K \ge 2$), requiring sustained ground-level posture across consecutive sliding windows (1.0 to 1.5 seconds) to suppress transient movement spikes.
+## Research evidence
 
-3. **Separation of Synthetic Baselines**:
-   Synthetic kinematics demonstration sequences (12 simulated participants, 228 sequences) are cataloged separately in `datasets/raw/coco_17/` for functional verification, and are explicitly demarcated from real human experimental results.
+The primary benchmark is **GMDCSA-24**: 160 staged recordings from four adult participants, evaluated using four-fold leave-one-subject-out validation. Synthetic sequences are maintained separately for engineering checks. SAFER-Activities integration is available as a gated dataset utility; it is not the source of the bundled real-data model.
 
----
+| Recorded TemporalCNN result | Value |
+| --- | ---: |
+| Mean window F1 across held-out subjects | 0.7570 ± 0.1175 |
+| Mean AUROC | 0.8821 |
+| Raw false alarms per hour | 119.72 |
+| False alarms per hour with K=2 | 95.00 |
+| Pooled event recall with K=2 | 71/77 (92.2%) |
 
-## Measured Benchmark Results
+These historical results demonstrate substantial remaining limitations. They predate the demo's tracking-quality safeguard and were not regenerated during the frontend update. They do not establish performance on everyday falls, older adults, or clinical populations. Detailed tables, calibration results, and measured CPU timings are in [benchmarks](docs/benchmarks.md); provenance and access requirements are in [datasets](docs/datasets.md).
 
-### Table 1: Raw Unconfirmed LOSO Cross-Validation on Real Human Data (GMDCSA-24, Threshold = 0.50)
+## Development and verification
 
-Evaluates unconfirmed single-window classifications without temporal confirmation across 4 held-out participant folds:
-
-| Model Architecture | Parameters | Window F1 (Mean ± Std) | Window Recall | Window Precision | AUROC | Event Recall (Raw) | Unconfirmed FA/hr | Mean Detection Delay |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **TemporalCNN (Model B)** | **66,274** | **0.7570 ± 0.1175** | **0.8148** | **0.7149** | **0.8821** | **95.7%** | **119.72** | **1.66s** |
-| BaselineMLP (Model A) | 100,322 | 0.7831 ± 0.1038 | 0.8966 | 0.6986 | 0.8926 | 96.7% | 140.43 | 1.49s |
-| SmallTCN (Model C) | 67,154 | 0.6889 ± 0.0841 | 0.7513 | 0.6523 | 0.8516 | 89.9% | 131.83 | 1.61s |
-
-*Primary Deployable Model (TemporalCNN Fold 3 Checkpoint)*: **100% Event Recall (21/21 falls detected)**, **0.9104 Window F1**, **0.9815 AUROC**, **1.81s raw delay**.
-
-*Calibration Assessment*: Mean Expected Calibration Error (ECE) across folds was **63.3% before** and **59.3% after** temperature scaling ($T = 1.627$). Under severe cross-participant domain shift, post-hoc scaling provides only minor calibration benefits (4.0% absolute reduction), demonstrating that static probability thresholding alone is insufficient and directly motivating temporal confirmation filtering.
-
-### Table 2: Temporal Confirmation Policy Ablation on Continuous Video Monitoring (GMDCSA-24)
-
-Evaluates the trade-off between false-alarm suppression and physical detection delay when requiring $K$ consecutive positive windows:
-
-| Confirmation Policy | Definition | Overall Event Recall | Detected Events | Mean Physical Delay | False Alarm Rate |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| **K = 1 (Raw / Unfiltered)** | Single positive window fires alarm | **96.1%** | 74 / 77 | **1.66 s** | 119.72 FA/hr (~1 every 30.1s) |
-| **K = 2 (Standard Confirmation)** | 2 consecutive positive windows (1.0s) | **92.2%** | 71 / 77 | **2.18 s** | 95.00 FA/hr |
-| **K = 3 (Conservative)** | 3 consecutive positive windows (1.5s) | **87.0%** | 67 / 77 | **2.67 s** | 87.53 FA/hr |
-| **K = 4 (High Latency)** | 4 consecutive positive windows (2.0s) | **70.1%** | 54 / 77 | **3.14 s** | 83.80 FA/hr |
-
-*Analysis*: $K = 2$ represents the recommended operational configuration for consumer edge deployment, maintaining >92% event recall while substantially reducing transient false positives. Full fold-by-fold results are saved in `experiments/gmdcsa24_real/results/confirmation_evaluation.json`.
-
-### Table 3: Measured Consumer CPU Latency Profile (Batch Size = 1)
-
-Measured on consumer x86_64 CPU hardware (Intel/AMD):
-
-| Pipeline Stage | Implementation | Median Latency | P95 Latency | Memory / Operational Notes |
-| :--- | :--- | :---: | :---: | :--- |
-| **Model Loading** | PyTorch vs ONNX | 14.60 ms | — | ONNX session initialization: 7.63 ms |
-| **Pose Detection** | MediaPipe Tasks API | 23.60 ms | 29.89 ms | TFLite XNNPACK CPU delegate |
-| **Feature Preprocessing** | Skeleton Normalization | 0.29 ms | 0.41 ms | Hip centering and torso scaling |
-| **Classifier Inference** | **ONNX Runtime (CPU)** | **0.20 ms** | **0.28 ms** | **2.72× faster than PyTorch CPU (0.56 ms)** |
-| **Uncertainty Policy** | Temperature + Rejection | 0.03 ms | 0.05 ms | Calibrated with fitted T = 1.627 |
-| **Temporal Confirmation** | K-Window State Machine | 0.002 ms | 0.004 ms | Sliding confirmation buffer |
-| **Grounded Explainer** | Template Rule Engine | 0.005 ms | 0.008 ms | Deterministic, zero GPU overhead |
-| **End-to-End Processing** | Full Video Pipeline | — | — | **23.2 FPS (2.32× Real-Time at 10 Hz)** |
-| **Peak RAM Footprint** | Complete Process | — | — | **561.2 MB resident set size** |
-
----
-
-## Demonstration Interface
-
-The local Gradio application (`demo/app.py`) provides:
-- **Input Flexibility**: Video file upload (MP4) and live webcam stream capture.
-- **Annotated Playback**: Tracked skeletal overlays with frame-level state banners (Normal, Uncertain, Confirmed Fall).
-- **Temporal Probability Trajectory**: Continuous plot displaying calibrated fall probabilities, decision thresholds, uncertainty bounds, and shaded confirmation regions.
-- **Configurable Confirmation**: Interactive parameter controls for confirmation window count ($K$) and confidence thresholds (defaults to validation-aligned threshold $0.50$).
-- **Telemetry Card**: Real-time measurement of inference latency, detection delays, tracking visibility, and process memory.
-- **Safety-Verified Explanations**: Concise, factual summaries validated by `EvidenceConsistencyChecker` to eliminate hallucinated injury or dispatch claims.
-
----
-
-## Verification and Reproducibility
-
-### Automated Test Suite (22 Unit and Integration Tests)
+Install development dependencies into the active virtual environment:
 
 ```bash
-# Windows
-.\scripts\run_tests.ps1
+python -m pip install -r requirements-dev.txt
+```
 
+Run the complete automated suite:
+
+```bash
 # Linux / macOS
 ./scripts/run_tests.sh
+
+# Windows PowerShell
+.\scripts\run_tests.ps1
 ```
 
-### CPU Latency Benchmarking
+The current suite contains **51 tests**, covering model behavior, preprocessing, ONNX/PyTorch parity, real-video processing, temporal confirmation, low-visibility rejection, validation errors, output isolation, resource cleanup, and interface configuration.
 
 ```bash
+# Optional coverage report
+python -m pytest --cov=demo --cov=src --cov-report=term-missing
+
+# Recorded-experiment workflows; training requires the relevant dataset inputs
 python src/evaluation/benchmark_cpu.py
-```
-
-### LOSO Cross-Validation Training on GMDCSA-24 Data
-
-```bash
 python experiments/gmdcsa24_real/src/train_loso.py
-```
-
-### Temporal Confirmation Ablation Evaluation
-
-```bash
 python experiments/gmdcsa24_real/src/evaluate_confirmation.py
 ```
 
----
+Desktop, mobile, and dark-mode browser workflows were checked locally alongside video playback. Physical webcam capture and model retraining were not exercised in that verification. Passing tests establish software behavior, not clinical reliability.
 
-## Research Limitations and Safety Disclosures
+## Documentation
 
-- **Staged Conditions**: Training data reflects laboratory-staged falls by 4 healthy adult participants onto protective mats. The system has not been evaluated on authentic falls in geriatric populations.
-- **Assistive Devices**: Walking aids (canes, walkers, wheelchairs) were not present in the participant cohort and may cause keypoint occlusions.
-- **Not a Medical Device**: VisionGuard Lite is research software provided for academic evaluation. It is not certified for clinical patient monitoring, emergency dispatch, or unsupervised life-safety applications.
+| Guide | Contents |
+| --- | --- |
+| [Setup and troubleshooting](docs/setup.md) | Installation, model assets, launch options, common failures |
+| [Architecture](docs/architecture.md) | Vertical pipeline diagram, module boundaries, decision rules |
+| [Model card](docs/model-card.md) | Model configuration, training, and evaluation context |
+| [Datasets](docs/datasets.md) | Provenance, licenses, access, and synthetic fixtures |
+| [Benchmarks](docs/benchmarks.md) | Historical accuracy, confirmation, calibration, and latency results |
+| [Limitations](docs/limitations.md) | Intended use, known failure modes, and safety boundaries |
+| [Historical reports](docs/reports/README.md) | Earlier audits and local validation records |
 
-Detailed limitations and clinical boundary disclosures are documented in [LIMITATIONS.md](LIMITATIONS.md).
+## License and citation
 
----
+Project code is distributed under the [MIT License](LICENSE). Datasets and third-party artifacts retain their respective terms; consult the [dataset reference](docs/datasets.md) before reuse or redistribution.
 
-## Documentation Index
-
-- [ARCHITECTURE.md](ARCHITECTURE.md): Architectural specifications, landmark mapping, coordinate normalization, and SLM explanation design.
-- [MODEL_CARD.md](MODEL_CARD.md): Model parameters, training configuration, calibration results, and cross-validation metrics.
-- [DATASET.md](DATASET.md): Dataset provenance, citations, Zenodo DOIs, and privacy protocols.
-- [LIMITATIONS.md](LIMITATIONS.md): Operational trade-offs, clinical boundaries, and safety disclosures.
-- [LOCAL_VALIDATION_REPORT.md](LOCAL_VALIDATION_REPORT.md): Step-by-step local validation report.
-
----
-
-## License and Citation
-
-This repository is licensed under the [MIT License](LICENSE).
-
-When using this work in academic research, please cite the GMDCSA-24 dataset and this project:
+If you use GMDCSA-24 in research, cite its dataset publication:
 
 ```bibtex
 @article{alam2024gmdcsa24,
