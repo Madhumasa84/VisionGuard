@@ -54,31 +54,36 @@ class PipelineManager:
         self._load_models()
 
     def _load_models(self):
-        # 1. Load Real PyTorch Checkpoint
+        # 1. Load Real PyTorch Checkpoint (Strictly real GMDCSA model, no silent synthetic fallback)
         ckpt_path = REPO_ROOT / "checkpoints/real_temporalcnn_best.pt"
         if not ckpt_path.exists():
-            ckpt_path = REPO_ROOT / "checkpoints/temporal_cnn_best.pt"
+            raise FileNotFoundError(
+                f"Real-data model checkpoint not found at '{ckpt_path}'. "
+                "VisionGuard Lite strictly requires real GMDCSA-trained weights for deployment. "
+                "Run 'python experiments/gmdcsa24_real/src/train_loso.py' to regenerate."
+            )
 
-        if ckpt_path.exists():
-            ckpt = torch.load(str(ckpt_path), map_location="cpu", weights_only=False)
-            self.temperature = float(ckpt.get("temperature", 1.627))
-            self.optimal_threshold = float(ckpt.get("optimal_threshold", 0.50))
-            self.py_model = TemporalCNN(in_channels=51, num_classes=2)
-            state = ckpt.get("model_state", ckpt)
-            self.py_model.load_state_dict(state)
-            self.py_model.eval()
+        ckpt = torch.load(str(ckpt_path), map_location="cpu", weights_only=False)
+        self.temperature = float(ckpt.get("temperature", 1.627))
+        self.optimal_threshold = float(ckpt.get("optimal_threshold", 0.50))
+        self.py_model = TemporalCNN(in_channels=51, num_classes=2)
+        state = ckpt.get("model_state", ckpt)
+        self.py_model.load_state_dict(state)
+        self.py_model.eval()
 
         # 2. Load Real ONNX Session
         onnx_path = REPO_ROOT / "exported_models/real_temporalcnn.onnx"
         if not onnx_path.exists():
-            onnx_path = REPO_ROOT / "exported_models/temporal_cnn_clean.onnx"
+            raise FileNotFoundError(
+                f"Real-data ONNX model not found at '{onnx_path}'. "
+                "Export it using 'python -c \"from src.inference.onnx_exporter import export_temporal_cnn_to_onnx; ...\"'."
+            )
 
-        if onnx_path.exists():
-            sess_options = ort.SessionOptions()
-            sess_options.intra_op_num_threads = 2
-            sess_options.inter_op_num_threads = 1
-            self.onnx_session = ort.InferenceSession(str(onnx_path), sess_options, providers=["CPUExecutionProvider"])
-            self.input_name = self.onnx_session.get_inputs()[0].name
+        sess_options = ort.SessionOptions()
+        sess_options.intra_op_num_threads = 2
+        sess_options.inter_op_num_threads = 1
+        self.onnx_session = ort.InferenceSession(str(onnx_path), sess_options, providers=["CPUExecutionProvider"])
+        self.input_name = self.onnx_session.get_inputs()[0].name
 
     def predict_window(self, window_51_30: np.ndarray, backend: str = "onnx") -> float:
         """Runs single-window inference (1, 51, 30) through chosen backend."""
@@ -101,7 +106,7 @@ manager = PipelineManager()
 def process_video_pipeline(
     video_path: Optional[str],
     confirmation_k: int = 2,
-    confidence_thresh: float = 0.65,
+    confidence_thresh: float = 0.50,
     backend_choice: str = "ONNX Runtime (Fastest / Recommended)"
 ) -> Tuple[Optional[str], Optional[str], str, Dict[str, Any]]:
     """
@@ -114,7 +119,7 @@ def process_video_pipeline(
     6. Grounded explanation & telemetry generation
     """
     if not video_path or not os.path.exists(video_path):
-        return None, None, "⚠️ Please upload a valid video file or record a clip via webcam.", {
+        return None, None, "[WARNING] Please upload a valid video file or record a clip via webcam.", {
             "Status": "Invalid Input",
             "Error": "No video file received"
         }
@@ -129,7 +134,7 @@ def process_video_pipeline(
         extracted = extractor.extract_from_video(video_path, max_frames=250, target_fps=10.0)
         extractor.close()
     except Exception as e:
-        return None, None, f"❌ Pose extraction error: {str(e)}", {"Status": "Extraction Failure"}
+        return None, None, f"[ERROR] Pose extraction error: {str(e)}", {"Status": "Extraction Failure"}
 
     t_pose_ms = (time.perf_counter() - t_pose0) * 1000.0
     raw_lms = extracted["landmarks"] # (T, 33, 4)
@@ -138,7 +143,7 @@ def process_video_pipeline(
     num_frames = extracted["frame_count"]
 
     if num_frames < 10:
-        return None, None, "⚠️ Video sequence is too short (< 10 frames). Please provide a recording of at least 1.5 seconds.", {
+        return None, None, "[WARNING] Video sequence is too short (< 10 frames). Please provide a recording of at least 1.5 seconds.", {
             "Status": "Video Too Short",
             "Frames Detected": num_frames
         }
@@ -171,7 +176,7 @@ def process_video_pipeline(
 
     W = len(windows_51)
     if W == 0:
-        return None, None, "⚠️ No valid temporal windows could be extracted.", {"Status": "No Windows"}
+        return None, None, "[WARNING] No valid temporal windows could be extracted.", {"Status": "No Windows"}
 
     # Step 4: Batch / Single-Sample Inference
     t_infer0 = time.perf_counter()
@@ -209,19 +214,19 @@ def process_video_pipeline(
 
     # State decision
     if has_confirmed_fall:
-        final_state = "🚨 CONFIRMED FALL EVENT"
+        final_state = "CONFIRMED FALL EVENT"
         activity_label = "fall"
         state_color = (0, 0, 220)
     elif has_raw_spike:
-        final_state = "⚠️ UNCONFIRMED SPIKE (Filtered by K-Window Policy)"
+        final_state = "UNCONFIRMED SPIKE (Filtered by K-Window Policy)"
         activity_label = "possible_fall"
         state_color = (0, 140, 255)
     elif is_uncertain:
-        final_state = "⚠️ UNCERTAIN / LOW TRACKING CONFIDENCE"
+        final_state = "UNCERTAIN / LOW TRACKING CONFIDENCE"
         activity_label = "possible_fall"
         state_color = (0, 165, 255)
     else:
-        final_state = "✅ NORMAL ACTIVITY"
+        final_state = "NORMAL ACTIVITY"
         activity_label = "normal"
         state_color = (0, 200, 0)
 
@@ -308,9 +313,9 @@ def build_app():
     
     examples_list = []
     if os.path.exists(sample_vid):
-        examples_list.append([sample_vid, 2, 0.65, "ONNX Runtime (Fastest / Recommended)"])
+        examples_list.append([sample_vid, 2, 0.50, "ONNX Runtime (Fastest / Recommended)"])
     if os.path.exists(real_sample_fall):
-        examples_list.append([real_sample_fall, 2, 0.65, "ONNX Runtime (Fastest / Recommended)"])
+        examples_list.append([real_sample_fall, 2, 0.50, "ONNX Runtime (Fastest / Recommended)"])
 
     custom_theme = gr.themes.Soft(
         primary_hue="blue",
@@ -320,16 +325,15 @@ def build_app():
     with gr.Blocks(title="VisionGuard Lite: Edge Fall Detection") as demo:
         gr.Markdown(
             """
-            # 🛡️ VisionGuard Lite: Uncertainty-Aware Pose Fall Detection
-            **Edge-Deployable Human Fall Recognition & Calibration Demonstration**  
+            # VisionGuard Lite: Uncertainty-Aware Pose Fall Detection
+            **Edge-Deployable Human Fall Recognition and Calibration Demonstration**  
             *CPU-First Computer Vision Architecture with Post-Hoc Calibration, Temporal Confirmation, and Grounded Explanations.*
             """
         )
 
         gr.Markdown(
             """
-            > [!NOTE]
-            > **Scientific Integrity & Dataset Disclosure**:
+            > **Scientific Integrity and Dataset Disclosure**:
             > This demonstration runs the **real-data model** trained on the open-access **GMDCSA-24 dataset** (PMC11416611) across 4 human participants under Leave-One-Subject-Out (LOSO) cross-validation.
             > - **False Alarm Frequency**: In continuous unconfirmed monitoring, isolated window false alarms occur at **~132.4 false alarms/hour** (approximately once every **27.2 seconds**). 
             > - **Temporal Confirmation**: Requiring $K \\ge 2$ consecutive positive windows suppresses transient activity spikes (rapid sitting, bending).
@@ -344,7 +348,7 @@ def build_app():
                     sources=["upload", "webcam"]
                 )
                 
-                with gr.Accordion("⚙️ Advanced Pipeline Parameters", open=True):
+                with gr.Accordion("Pipeline Parameters", open=True):
                     with gr.Row():
                         backend_selector = gr.Dropdown(
                             label="Classifier Runtime Backend",
@@ -362,13 +366,13 @@ def build_app():
                         thresh_slider = gr.Slider(
                             minimum=0.20,
                             maximum=0.90,
-                            value=0.65,
+                            value=0.50,
                             step=0.05,
                             label="Decision Confidence Threshold",
                             info="Calibrated probability threshold for positive fall trigger."
                         )
 
-                run_btn = gr.Button("🔍 Run Temporal Fall Analysis", variant="primary", size="lg")
+                run_btn = gr.Button("Run Temporal Fall Analysis", variant="primary", size="lg")
 
                 if examples_list:
                     gr.Examples(
@@ -384,12 +388,12 @@ def build_app():
         with gr.Row():
             with gr.Column(scale=5):
                 explanation_box = gr.Textbox(
-                    label="💬 Evidence-Grounded Explanation (SLM Rule Engine)",
+                    label="Evidence-Grounded Explanation (Local Rule Engine / Optional SLM)",
                     lines=3,
                     interactive=False
                 )
             with gr.Column(scale=5):
-                telemetry_box = gr.JSON(label="📊 Edge Telemetry & Performance Diagnostics")
+                telemetry_box = gr.JSON(label="Edge Telemetry and Performance Diagnostics")
 
         run_btn.click(
             fn=process_video_pipeline,

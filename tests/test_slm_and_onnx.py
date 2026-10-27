@@ -52,9 +52,9 @@ def test_evidence_consistency_checker_catches_hallucination():
     assert any('fracture' in v or 'paramedics' in v for v in check['violations'])
 
 def test_onnx_model_inference():
-    onnx_path = str(REPO_ROOT / 'exported_models/temporal_cnn_clean.onnx')
+    onnx_path = str(REPO_ROOT / 'exported_models/real_temporalcnn.onnx')
     if not os.path.exists(onnx_path):
-        onnx_path = str(REPO_ROOT / 'exported_models/temporal_cnn.onnx')
+        onnx_path = str(REPO_ROOT / 'exported_models/synthetic_temporalcnn.onnx')
     if not os.path.exists(onnx_path):
         pytest.skip("ONNX model file not found yet")
         

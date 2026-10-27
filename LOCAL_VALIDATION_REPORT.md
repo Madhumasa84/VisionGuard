@@ -84,7 +84,7 @@ Executed via `pytest tests/ -v` on local CPU:
   - Window 5 (2.5s – 5.5s): `0.8813` (Resting on floor)
   - Window 6 (3.0s – 6.0s): `0.8806` (Resting on floor)
   - Window 7 (3.5s – 6.5s): `0.8967` (Resting on floor)
-- **Decision Status**: `🚨 CONFIRMED FALL EVENT`
+- **Decision Status**: `CONFIRMED FALL EVENT`
 - **Physical Confirmation Delay**: **0.5 s** from initial threshold crossing
 - **ONNX vs PyTorch Probability Parity**: Max difference = **$1.19 \times 10^{-7}$**
 - **Explanation**: `"ALERT: A sudden downward fall transition was detected with high confidence (90%). The body reached ground-level orientation."`
@@ -141,14 +141,16 @@ Benchmarked with Batch Size = 1 on consumer x86_64 CPU:
 
 | Verification Item | Status | Details |
 | :--- | :---: | :--- |
-| **Directory Hygiene** | ✅ PASS | All 734 NTFS `*:Zone.Identifier` and `.pyc` files removed |
-| **Colab Decoupling** | ✅ PASS | Zero hardcoded `/content/` or `/content/drive` paths in runtime code |
-| **Path Portability** | ✅ PASS | All scripts resolve dynamically via `pathlib.Path` |
-| **CPU-First Reproducibility** | ✅ PASS | `requirements-local.txt`, `.env.example`, PowerShell & Bash runners |
-| **Test Coverage** | ✅ PASS | 22/22 unit and integration tests passing |
-| **Model Weight Distribution** | ✅ PASS | Real GMDCSA models + ONNX models < 300 KB each |
-| **Dataset Privacy & Limits** | ✅ PASS | 2.0 GB raw human videos excluded via `.gitignore`; extracted features kept |
-| **Documentation Quality** | ✅ PASS | `README`, `ARCHITECTURE`, `MODEL_CARD`, `DATASET`, `LIMITATIONS` present |
-| **CI Automation** | ✅ PASS | GitHub Actions matrix workflow (`ubuntu-latest` and `windows-latest`) |
+| **Directory Hygiene** | PASS | All 734 NTFS `*:Zone.Identifier` and `.pyc` files removed; duplicate ONNX models consolidated |
+| **Colab Decoupling** | PASS | Zero hardcoded `/content/` or `/content/drive` paths in runtime code |
+| **Path Portability** | PASS | All scripts resolve dynamically via `pathlib.Path` |
+| **Dependency Alignment** | PASS | `requirements-local.txt` and `requirements.txt` harmonized to match runtime environment (`numpy>=1.24.0`, `gradio>=4.20.0`) |
+| **Model Integrity** | PASS | Synthetic fallback removed; demo strictly requires real trained GMDCSA checkpoints |
+| **CPU-First Reproducibility** | PASS | Reproducible CPU runtime, `.env.example`, PowerShell & Bash runners |
+| **Test Coverage** | PASS | 22/22 unit and integration tests passing; CI matrix configured for Ubuntu and Windows |
+| **Model Weight Distribution** | PASS | Real GMDCSA models + standalone ONNX models < 300 KB each |
+| **Dataset Privacy & Limits** | PASS | 2.0 GB raw human videos excluded via `.gitignore`; extracted features kept |
+| **Documentation Quality** | PASS | `README`, `ARCHITECTURE`, `MODEL_CARD`, `DATASET`, `LIMITATIONS` complete without promotional badges or emojis |
+| **CI Automation** | PASS | GitHub Actions matrix workflow (`ubuntu-latest` and `windows-latest`, Python 3.10 and 3.11) |
 
-**Overall Status**: 🚀 **APPROVED AND READY FOR PUBLIC GITHUB RELEASE**
+**Overall Status**: **APPROVED FOR PUBLIC GITHUB RELEASE**

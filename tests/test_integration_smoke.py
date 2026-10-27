@@ -56,7 +56,7 @@ def test_end_to_end_video_pipeline_smoke():
     out_vid, out_plot, exp, metrics = process_video_pipeline(
         sample_vid,
         confirmation_k=2,
-        confidence_thresh=0.65,
+        confidence_thresh=0.50,
         backend_choice="ONNX Runtime (Fastest / Recommended)"
     )
     assert out_vid is not None and os.path.exists(out_vid)

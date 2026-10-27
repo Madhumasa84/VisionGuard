@@ -98,7 +98,7 @@ $$\mathbf{p}_{\text{norm}}^{(t, j)} = \frac{\mathbf{p}^{(t, j)} - \mathbf{p}_{\t
 
 ## 4. Temporal Confirmation State Machine
 
-In real continuous video monitoring, unconfirmed window-level fall detectors suffer from high false alarm rates (~132.4 false alarms/hour, or one alarm every 27.2 seconds) due to transient movements like rapid sitting, tying shoes, or sudden camera shake.
+In continuous video monitoring, unconfirmed window-level fall detectors suffer from high false alarm rates (119.7–140.4 false alarms/hour, or one alarm every 25–30 seconds) due to transient movements like rapid sitting, tying shoes, or floor exercises.
 
 VisionGuard Lite incorporates a **temporal confirmation filter** ($K$-window policy):
 
@@ -114,8 +114,9 @@ Else:
 Confirmed Alert = (S_t >= K)
 ```
 
-- When $K=1$, the system operates in raw, unfiltered mode (useful for audit, but prone to false alarms).
-- When $K \ge 2$ (recommended default $K=2$), a fall alert is only triggered when sustained ground-level collapse is observed for at least 2 consecutive sliding windows (1.0–1.5 seconds).
+- When $K=1$, the system operates in raw, unfiltered mode (useful for audit, but prone to false alarms: 119.7 FA/hr).
+- When $K=2$ (recommended edge default), a fall alert is only triggered when sustained ground-level collapse is observed for at least 2 consecutive sliding windows (1.0–1.5 seconds), dropping false alarms to 95.0 FA/hr while maintaining 92.2% event recall.
+- When $K=3$ or $K=4$, false alarms drop further (87.5 and 83.8 FA/hr) at the expense of higher detection delay and increased missed falls (70.1% recall at $K=4$).
 - The system logs both the raw fall onset timestamp and the confirmed alert timestamp, reporting the exact confirmation latency.
 
 ---
@@ -126,7 +127,7 @@ Standard deep neural networks produce overconfident logits under cross-subject d
 
 1. **Temperature Scaling**:
    $$p_i = \frac{\exp(z_i / T)}{\sum_j \exp(z_j / T)}$$
-   Fitted on validation subjects ($T = 1.627$), reducing Expected Calibration Error (ECE).
+   Fitted on validation subjects ($T = 1.627$). Under 4-fold cross-validation, post-scaling ECE is 59.3% (down from 63.3% pre-scaling), confirming that post-hoc scaling alone cannot eliminate cross-subject shift and reinforcing the necessity of temporal confirmation.
 2. **Selective Prediction Policy**:
    If mean keypoint visibility is $< 0.50$ or calibrated fall probability falls in the ambiguous band $[0.35, \tau)$, the system routes the frame to `UNCERTAIN` for secondary caregiver review, abstaining from confident false alarms.
 
@@ -135,5 +136,6 @@ Standard deep neural networks produce overconfident logits under cross-subject d
 ## 6. Grounded Explanations with Safety Verification
 
 To provide interpretable alerts without risking medical hallucinations:
-1. **`TemplateExplainer`**: A deterministic rule engine that translates cv telemetry (activity, confidence, visibility, temporal confirmation) into concise, factual explanations with $< 0.01$ ms latency.
-2. **`EvidenceConsistencyChecker`**: Automated rule verifier that scans all generated text against ground-truth CV telemetry, blocking hallucinated injury diagnoses (e.g., "fracture", "paramedics dispatched").
+1. **`TemplateExplainer` (Default CPU Runtime)**: A deterministic rule engine that translates cv telemetry (activity, confidence, visibility, temporal confirmation) into concise, factual explanations with $< 0.01$ ms latency.
+2. **`QwenSLMExplainer` (Optional Research Component)**: Integrates lightweight quantized Small Language Models (e.g. Qwen2.5-0.5B / 1.5B) for natural language reasoning. Disabled by default in the local demo to preserve real-time CPU throughput.
+3. **`EvidenceConsistencyChecker`**: Automated rule verifier that scans all generated text against ground-truth CV telemetry, blocking hallucinated injury diagnoses (e.g., "fracture", "paramedics dispatched").

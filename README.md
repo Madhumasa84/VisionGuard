@@ -2,6 +2,8 @@
 
 VisionGuard Lite is an open-source, edge-deployable computer vision framework for privacy-preserving human activity recognition and fall detection. The system is engineered specifically for commodity CPU hardware, incorporating post-hoc probability calibration (temperature scaling), selective prediction, temporal confirmation state filtering, and evidence-grounded natural language explanations.
 
+![VisionGuard Lite Demonstration Preview](docs/demo_preview.png)
+
 ---
 
 ## Quickstart
@@ -50,6 +52,7 @@ Key architectural principles:
 - **Strict Coordinate Isolation**: MediaPipe extracts 33 joints in normalized screen coordinates. `PoseSchemaAuditor` explicitly maps anatomically equivalent landmarks to COCO-17 before feeding the classifier, preventing representation corruption.
 - **Scale and Translation Invariance**: Skeletal sequences are centered on the mid-hip coordinate and scaled relative to torso length, ensuring robust classification regardless of subject position or camera distance.
 - **Dual Runtime Backends**: Supports both ONNX Runtime CPU (default, optimized) and PyTorch CPU execution.
+- **Two-Tier Explanation Architecture**: The local deployment defaults to a deterministic, rule-based explainer (`TemplateExplainer`) for instantaneous (<0.01 ms), zero-GPU operation. An optional autoregressive small language model (`QwenSLMExplainer` based on Qwen2.5-0.5B-Instruct) is cataloged as a research prototype. Both paths feed into an automated `EvidenceConsistencyChecker` to reject ungrounded medical claims.
 
 For detailed topological mappings, coordinate transformations, and dataflow diagrams, refer to [ARCHITECTURE.md](ARCHITECTURE.md).
 
@@ -70,17 +73,34 @@ For detailed topological mappings, coordinate transformations, and dataflow diag
 
 ## Measured Benchmark Results
 
-### 1. 4-Fold LOSO Cross-Validation on Real Human Data (GMDCSA-24)
+### Table 1: Raw Unconfirmed LOSO Cross-Validation on Real Human Data (GMDCSA-24, Threshold = 0.50)
 
-| Model Architecture | Parameters | Window F1 (Mean ± Std) | Window Recall | Window Precision | AUROC | Event-Level Recall | Unconfirmed FA/hr | Mean Detection Delay |
+Evaluates unconfirmed single-window classifications without temporal confirmation across 4 held-out participant folds:
+
+| Model Architecture | Parameters | Window F1 (Mean ± Std) | Window Recall | Window Precision | AUROC | Event Recall (Raw) | Unconfirmed FA/hr | Mean Detection Delay |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **TemporalCNN (Model B)** | **66,274** | **0.7570 ± 0.1175** | **0.8148** | **0.7149** | **0.8821** | **95.7%** | **119.72** | **1.66s** |
 | BaselineMLP (Model A) | 100,322 | 0.7831 ± 0.1038 | 0.8966 | 0.6986 | 0.8926 | 96.7% | 140.43 | 1.49s |
 | SmallTCN (Model C) | 67,154 | 0.6889 ± 0.0841 | 0.7513 | 0.6523 | 0.8516 | 89.9% | 131.83 | 1.61s |
 
-*Fold 3 Test Subject 3 (Primary Checkpoint)*: **100% Event Recall (21/21 falls detected)**, **0.9104 F1**, **0.9815 AUROC**, **1.81s detection delay**.
+*Primary Deployable Model (TemporalCNN Fold 3 Checkpoint)*: **100% Event Recall (21/21 falls detected)**, **0.9104 Window F1**, **0.9815 AUROC**, **1.81s raw delay**.
 
-### 2. Measured Consumer CPU Latency Profile (Batch Size = 1)
+*Calibration Assessment*: Mean Expected Calibration Error (ECE) across folds was **63.3% before** and **59.3% after** temperature scaling ($T = 1.627$). Under severe cross-participant domain shift, post-hoc scaling provides only minor calibration benefits (4.0% absolute reduction), demonstrating that static probability thresholding alone is insufficient and directly motivating temporal confirmation filtering.
+
+### Table 2: Temporal Confirmation Policy Ablation on Continuous Video Monitoring (GMDCSA-24)
+
+Evaluates the trade-off between false-alarm suppression and physical detection delay when requiring $K$ consecutive positive windows:
+
+| Confirmation Policy | Definition | Overall Event Recall | Detected Events | Mean Physical Delay | False Alarm Rate |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| **K = 1 (Raw / Unfiltered)** | Single positive window fires alarm | **96.1%** | 74 / 77 | **1.66 s** | 119.72 FA/hr (~1 every 30.1s) |
+| **K = 2 (Standard Confirmation)** | 2 consecutive positive windows (1.0s) | **92.2%** | 71 / 77 | **2.18 s** | 95.00 FA/hr |
+| **K = 3 (Conservative)** | 3 consecutive positive windows (1.5s) | **87.0%** | 67 / 77 | **2.67 s** | 87.53 FA/hr |
+| **K = 4 (High Latency)** | 4 consecutive positive windows (2.0s) | **70.1%** | 54 / 77 | **3.14 s** | 83.80 FA/hr |
+
+*Analysis*: $K = 2$ represents the recommended operational configuration for consumer edge deployment, maintaining >92% event recall while substantially reducing transient false positives. Full fold-by-fold results are saved in `experiments/gmdcsa24_real/results/confirmation_evaluation.json`.
+
+### Table 3: Measured Consumer CPU Latency Profile (Batch Size = 1)
 
 Measured on consumer x86_64 CPU hardware (Intel/AMD):
 
@@ -104,7 +124,7 @@ The local Gradio application (`demo/app.py`) provides:
 - **Input Flexibility**: Video file upload (MP4) and live webcam stream capture.
 - **Annotated Playback**: Tracked skeletal overlays with frame-level state banners (Normal, Uncertain, Confirmed Fall).
 - **Temporal Probability Trajectory**: Continuous plot displaying calibrated fall probabilities, decision thresholds, uncertainty bounds, and shaded confirmation regions.
-- **Configurable Confirmation**: Interactive parameter controls for confirmation window count ($K$) and confidence thresholds.
+- **Configurable Confirmation**: Interactive parameter controls for confirmation window count ($K$) and confidence thresholds (defaults to validation-aligned threshold $0.50$).
 - **Telemetry Card**: Real-time measurement of inference latency, detection delays, tracking visibility, and process memory.
 - **Safety-Verified Explanations**: Concise, factual summaries validated by `EvidenceConsistencyChecker` to eliminate hallucinated injury or dispatch claims.
 
@@ -134,6 +154,12 @@ python src/evaluation/benchmark_cpu.py
 python experiments/gmdcsa24_real/src/train_loso.py
 ```
 
+### Temporal Confirmation Ablation Evaluation
+
+```bash
+python experiments/gmdcsa24_real/src/evaluate_confirmation.py
+```
+
 ---
 
 ## Research Limitations and Safety Disclosures
@@ -148,8 +174,8 @@ Detailed limitations and clinical boundary disclosures are documented in [LIMITA
 
 ## Documentation Index
 
-- [ARCHITECTURE.md](ARCHITECTURE.md): Architectural specifications, landmark mapping, and coordinate normalization.
-- [MODEL_CARD.md](MODEL_CARD.md): Model parameters, training configuration, and cross-validation metrics.
+- [ARCHITECTURE.md](ARCHITECTURE.md): Architectural specifications, landmark mapping, coordinate normalization, and SLM explanation design.
+- [MODEL_CARD.md](MODEL_CARD.md): Model parameters, training configuration, calibration results, and cross-validation metrics.
 - [DATASET.md](DATASET.md): Dataset provenance, citations, Zenodo DOIs, and privacy protocols.
 - [LIMITATIONS.md](LIMITATIONS.md): Operational trade-offs, clinical boundaries, and safety disclosures.
 - [LOCAL_VALIDATION_REPORT.md](LOCAL_VALIDATION_REPORT.md): Step-by-step local validation report.

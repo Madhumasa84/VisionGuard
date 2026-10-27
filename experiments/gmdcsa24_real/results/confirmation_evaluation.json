@@ -1,0 +1,178 @@
+{
+  "1": {
+    "folds": {
+      "fold_1": {
+        "test_subject": "Subject 1",
+        "event_recall": 0.9333,
+        "detected_events": 14,
+        "total_events": 15,
+        "mean_delay_sec": 1.559,
+        "false_alarms_per_hour": 129.12
+      },
+      "fold_2": {
+        "test_subject": "Subject 2",
+        "event_recall": 0.9615,
+        "detected_events": 25,
+        "total_events": 26,
+        "mean_delay_sec": 1.45,
+        "false_alarms_per_hour": 164.18
+      },
+      "fold_3": {
+        "test_subject": "Subject 3",
+        "event_recall": 1.0,
+        "detected_events": 21,
+        "total_events": 21,
+        "mean_delay_sec": 1.81,
+        "false_alarms_per_hour": 55.15
+      },
+      "fold_4": {
+        "test_subject": "Subject 4",
+        "event_recall": 0.9333,
+        "detected_events": 14,
+        "total_events": 15,
+        "mean_delay_sec": 1.818,
+        "false_alarms_per_hour": 130.44
+      }
+    },
+    "aggregate": {
+      "mean_event_recall": 0.957,
+      "total_detected_events": 74,
+      "total_events": 77,
+      "overall_event_recall": 0.961,
+      "mean_detection_delay_sec": 1.659,
+      "mean_false_alarms_per_hour": 119.72
+    }
+  },
+  "2": {
+    "folds": {
+      "fold_1": {
+        "test_subject": "Subject 1",
+        "event_recall": 0.9333,
+        "detected_events": 14,
+        "total_events": 15,
+        "mean_delay_sec": 2.066,
+        "false_alarms_per_hour": 96.84
+      },
+      "fold_2": {
+        "test_subject": "Subject 2",
+        "event_recall": 0.9231,
+        "detected_events": 24,
+        "total_events": 26,
+        "mean_delay_sec": 1.959,
+        "false_alarms_per_hour": 134.33
+      },
+      "fold_3": {
+        "test_subject": "Subject 3",
+        "event_recall": 1.0,
+        "detected_events": 21,
+        "total_events": 21,
+        "mean_delay_sec": 2.407,
+        "false_alarms_per_hour": 18.38
+      },
+      "fold_4": {
+        "test_subject": "Subject 4",
+        "event_recall": 0.8,
+        "detected_events": 12,
+        "total_events": 15,
+        "mean_delay_sec": 2.287,
+        "false_alarms_per_hour": 130.44
+      }
+    },
+    "aggregate": {
+      "mean_event_recall": 0.9141,
+      "total_detected_events": 71,
+      "total_events": 77,
+      "overall_event_recall": 0.9221,
+      "mean_detection_delay_sec": 2.18,
+      "mean_false_alarms_per_hour": 95.0
+    }
+  },
+  "3": {
+    "folds": {
+      "fold_1": {
+        "test_subject": "Subject 1",
+        "event_recall": 0.9333,
+        "detected_events": 14,
+        "total_events": 15,
+        "mean_delay_sec": 2.574,
+        "false_alarms_per_hour": 96.84
+      },
+      "fold_2": {
+        "test_subject": "Subject 2",
+        "event_recall": 0.8462,
+        "detected_events": 22,
+        "total_events": 26,
+        "mean_delay_sec": 2.41,
+        "false_alarms_per_hour": 104.48
+      },
+      "fold_3": {
+        "test_subject": "Subject 3",
+        "event_recall": 0.9524,
+        "detected_events": 20,
+        "total_events": 21,
+        "mean_delay_sec": 2.876,
+        "false_alarms_per_hour": 18.38
+      },
+      "fold_4": {
+        "test_subject": "Subject 4",
+        "event_recall": 0.7333,
+        "detected_events": 11,
+        "total_events": 15,
+        "mean_delay_sec": 2.824,
+        "false_alarms_per_hour": 130.44
+      }
+    },
+    "aggregate": {
+      "mean_event_recall": 0.8663,
+      "total_detected_events": 67,
+      "total_events": 77,
+      "overall_event_recall": 0.8701,
+      "mean_detection_delay_sec": 2.671,
+      "mean_false_alarms_per_hour": 87.53
+    }
+  },
+  "4": {
+    "folds": {
+      "fold_1": {
+        "test_subject": "Subject 1",
+        "event_recall": 0.8,
+        "detected_events": 12,
+        "total_events": 15,
+        "mean_delay_sec": 2.972,
+        "false_alarms_per_hour": 96.84
+      },
+      "fold_2": {
+        "test_subject": "Subject 2",
+        "event_recall": 0.7308,
+        "detected_events": 19,
+        "total_events": 26,
+        "mean_delay_sec": 2.799,
+        "false_alarms_per_hour": 89.55
+      },
+      "fold_3": {
+        "test_subject": "Subject 3",
+        "event_recall": 0.6667,
+        "detected_events": 14,
+        "total_events": 21,
+        "mean_delay_sec": 3.457,
+        "false_alarms_per_hour": 18.38
+      },
+      "fold_4": {
+        "test_subject": "Subject 4",
+        "event_recall": 0.6,
+        "detected_events": 9,
+        "total_events": 15,
+        "mean_delay_sec": 3.349,
+        "false_alarms_per_hour": 130.44
+      }
+    },
+    "aggregate": {
+      "mean_event_recall": 0.6994,
+      "total_detected_events": 54,
+      "total_events": 77,
+      "overall_event_recall": 0.7013,
+      "mean_detection_delay_sec": 3.144,
+      "mean_false_alarms_per_hour": 83.8
+    }
+  }
+}

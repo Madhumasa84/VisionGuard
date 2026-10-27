@@ -32,6 +32,7 @@ jobs:
           pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
           pip install -r requirements-local.txt
           pip install pytest pytest-cov
+          pip install -e . --no-deps
 
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
@@ -40,11 +41,16 @@ jobs:
           pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
           pip install -r requirements-local.txt
           pip install pytest pytest-cov
+          pip install -e . --no-deps
 
-      - name: Run Unit Tests
+      - name: Run Unit & Integration Tests
+        env:
+          PYTHONPATH: .
         run: |
-          pytest tests/ -v
+          python -m pytest tests/ -v
 
       - name: Run Integration Pipeline Smoke Test
+        env:
+          PYTHONPATH: .
         run: |
-          python -c "from demo.app import process_video_pipeline; print(process_video_pipeline('demo/sample_activity.mp4'))"
+          python -c "from demo.app import process_video_pipeline; res = process_video_pipeline('demo/sample_activity.mp4'); print(res[3]); assert res[0] is not None"

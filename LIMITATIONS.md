@@ -12,12 +12,13 @@ VisionGuard Lite is an open-source academic research demonstration and baseline 
 ---
 
 ## 2. False Alarm Frequency & Operational Trade-Offs
-- **Unconfirmed Window-Level False Alarms**: In continuous unconfirmed monitoring, isolated window false alarms occur at a rate of **~132.4 false alarms per hour** (equivalent to approximately **one false alarm every 27.2 seconds**).
+- **Unconfirmed Window-Level False Alarms**: In continuous unconfirmed monitoring ($K=1$), isolated window false alarms occur at **119.72 false alarms per hour** on TemporalCNN (up to **140.43 FA/hr** on BaselineMLP), equivalent to approximately **one false alarm every 25.6–30.1 seconds**.
+- **Calibration Limitations**: Temperature scaling ($T=1.627$) only slightly reduces ECE (from 63.3% to 59.3%), indicating that probability confidence values alone cannot prevent false alarms under cross-subject shift.
 - **Causes of Transient False Positives**:
   - Rapid transitions (e.g., throwing oneself onto a sofa or bed).
   - Vigorous floor-level exercises (stretching, yoga, push-ups).
   - Reaching rapidly down to pick up dropped items.
-- **Temporal Confirmation Trade-Off**: Requiring $K \ge 2$ consecutive positive windows (1.0–1.5 seconds) effectively suppresses isolated transient spikes, but inherently introduces a **1.0–1.8 second physical detection delay** before an alert is dispatched.
+- **Temporal Confirmation Trade-Off**: Requiring $K=2$ consecutive positive windows suppresses false alarms to **95.00 FA/hr** while maintaining **92.2% event recall**, but introduces a **2.18-second mean confirmation delay**. Requiring $K=4$ reduces false alarms to 83.75 FA/hr at the cost of missing 29.9% of falls (70.1% recall) and a 3.14-second delay.
 
 ---
 
