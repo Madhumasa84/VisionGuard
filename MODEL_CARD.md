@@ -1,4 +1,4 @@
-# 📇 Model Card — VisionGuard Lite TemporalCNN
+# Model Card: VisionGuard Lite TemporalCNN
 
 ## Model Details
 - **Architecture**: Temporal Convolutional Network (1D TemporalCNN)

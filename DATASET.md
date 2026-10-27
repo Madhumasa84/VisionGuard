@@ -1,4 +1,4 @@
-# 📊 Dataset Provenance & Privacy Documentation
+# Dataset Provenance and Privacy Documentation
 
 VisionGuard Lite incorporates three distinct dataset representations across its research and engineering pipeline.
 

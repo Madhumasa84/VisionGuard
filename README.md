@@ -1,114 +1,119 @@
-# 🛡️ VisionGuard Lite: CPU-First Uncertainty-Aware Fall Detection
+# VisionGuard Lite: CPU-First Uncertainty-Aware Fall Detection
 
-[![Python 3.10 | 3.11](https://img.shields.io/badge/python-3.10%20%7C%203.11-blue.svg)](https://www.python.org/)
-[![PyTorch CPU](https://img.shields.io/badge/PyTorch-2.1+-ee4c2c.svg)](https://pytorch.org/)
-[![ONNX Runtime](https://img.shields.io/badge/ONNX%20Runtime-0.20ms-005ced.svg)](https://onnxruntime.ai/)
-[![Tests Passing](https://img.shields.io/badge/Tests-22%2F22%20Passing-brightgreen.svg)](tests/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
-An open-source, edge-deployable Computer Vision framework for privacy-preserving human fall detection and activity recognition. Designed from the ground up for **CPU-first consumer hardware** with post-hoc probability calibration (Temperature Scaling), selective prediction, temporal confirmation state filtering, and evidence-grounded explanations.
+VisionGuard Lite is an open-source, edge-deployable computer vision framework for privacy-preserving human activity recognition and fall detection. The system is engineered specifically for commodity CPU hardware, incorporating post-hoc probability calibration (temperature scaling), selective prediction, temporal confirmation state filtering, and evidence-grounded natural language explanations.
 
 ---
 
-## ⚡ Quickstart (One-Command Startup)
+## Quickstart
 
-### 🪟 Windows (PowerShell)
+### Windows (PowerShell)
+
 ```powershell
-# 1. Automated environment setup (creates .venv and installs CPU dependencies)
+# Set up Python virtual environment and CPU dependencies
 .\scripts\setup_windows.ps1
 
-# 2. Launch interactive Gradio Web Demonstration
+# Launch local Gradio demonstration interface
 .\scripts\run_local.ps1
 ```
 
-### 🐧 Linux / macOS (Bash)
+### Linux and macOS (Bash)
+
 ```bash
-# 1. Create virtual environment and install CPU dependencies
+# Create virtual environment and install CPU dependencies
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements-local.txt
 
-# 2. Launch interactive Gradio Web Demonstration
+# Launch local Gradio demonstration interface
 ./scripts/run_local.sh
 ```
 
-Open your browser at **`http://127.0.0.1:7860`** to access the research demonstration interface.
+Once running, navigate to `http://127.0.0.1:7860` in any modern web browser. The server binds strictly to `127.0.0.1` and does not generate public tunnels.
 
 ---
 
-## 🏛️ System Architecture
+## System Architecture
 
 ```mermaid
 flowchart LR
-    A["Video / Webcam<br>(10 FPS)"] --> B["MediaPipe Tasks<br>(33 Keypoints)"]
-    B --> C["PoseSchemaAuditor<br>(COCO-17 Mapping)"]
-    C --> D["PosePreprocessor<br>(Hip Centered, Torso Scaled)"]
-    D --> E["TemporalCNN (1D Conv)<br>(66k Params | ONNX 0.20ms)"]
-    E --> F["Temperature Scaling<br>(T = 1.627)"]
-    F --> G["Temporal Confirmation<br>(K >= 2 Windows)"]
-    G --> H["Grounded Explainer<br>(Factual Rule Engine)"]
-    H --> I["Gradio Interface<br>(Timeline, Video, Telemetry)"]
+    A["Video / Webcam (10 FPS)"] --> B["MediaPipe Tasks (33 Keypoints)"]
+    B --> C["PoseSchemaAuditor (COCO-17 Mapping)"]
+    C --> D["PosePreprocessor (Hip Centered, Torso Scaled)"]
+    D --> E["TemporalCNN (1D Conv, ONNX Runtime)"]
+    E --> F["Temperature Scaling (T = 1.627)"]
+    F --> G["Temporal Confirmation (K >= 2 Windows)"]
+    G --> H["Grounded Explainer (Rule Engine)"]
+    H --> I["Gradio Interface (Video, Timeline, Diagnostics)"]
 ```
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for full dataflow diagrams, landmark index mappings, and mathematical formulations.
+Key architectural principles:
+- **Strict Coordinate Isolation**: MediaPipe extracts 33 joints in normalized screen coordinates. `PoseSchemaAuditor` explicitly maps anatomically equivalent landmarks to COCO-17 before feeding the classifier, preventing representation corruption.
+- **Scale and Translation Invariance**: Skeletal sequences are centered on the mid-hip coordinate and scaled relative to torso length, ensuring robust classification regardless of subject position or camera distance.
+- **Dual Runtime Backends**: Supports both ONNX Runtime CPU (default, optimized) and PyTorch CPU execution.
+
+For detailed topological mappings, coordinate transformations, and dataflow diagrams, refer to [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
-## 🔬 Scientific Integrity & Real Dataset Provenance
+## Scientific Integrity and Dataset Provenance
 
-VisionGuard Lite prioritizes rigorous empirical verification over synthetic claims:
+1. **Real Human Training Data (GMDCSA-24)**:
+   Models are trained and evaluated on the open-access GMDCSA-24 dataset (Alam et al., *Data in Brief* / PMC11416611, Zenodo: `10.5281/zenodo.13354453`). The benchmark comprises 160 video recordings across 4 participants evaluated under a strict 4-Fold Leave-One-Subject-Out (LOSO) cross-validation protocol, ensuring zero subject overlap across train, validation, and test splits.
 
-1. **Real Human Training Data (GMDCSA-24)**: Models are trained and evaluated on the open-access **GMDCSA-24 dataset** (*Data in Brief* / PMC11416611, Zenodo: `10.5281/zenodo.13354453`), consisting of 160 real human video recordings across 4 participants under a strict **4-Fold Leave-One-Subject-Out (LOSO)** cross-validation protocol (zero participant leakage between train, val, and test).
-2. **False Alarm Reality**: In unconfirmed continuous monitoring, window-level fall detectors produce **~132.4 false alarms per hour** (approximately **one false alarm every 27.2 seconds**). VisionGuard Lite implements a **Temporal Confirmation Filter** ($K \ge 2$) that requires sustained ground-level posture across consecutive sliding windows (1.0–1.5s), suppressing transient false positives.
-3. **Synthetic Demonstration Separation**: Original synthetic demonstration sequences (12 simulated participants, 228 sequences) are cleanly cataloged in `datasets/raw/coco_17/` for reproducible testing, but are explicitly distinguished from real human evaluation.
+2. **False Alarm Frequency in Continuous Monitoring**:
+   In continuous unconfirmed monitoring, isolated window-level fall detectors produce approximately **132.4 false alarms per hour** (equivalent to one false alarm every 27.2 seconds). VisionGuard Lite addresses this with a **Temporal Confirmation Filter** ($K \ge 2$), requiring sustained ground-level posture across consecutive sliding windows (1.0 to 1.5 seconds) to suppress transient movement spikes.
+
+3. **Separation of Synthetic Baselines**:
+   Synthetic kinematics demonstration sequences (12 simulated participants, 228 sequences) are cataloged separately in `datasets/raw/coco_17/` for functional verification, and are explicitly demarcated from real human experimental results.
 
 ---
 
-## 📊 Measured Benchmark Results
+## Measured Benchmark Results
 
-### 1. 4-Fold LOSO Real Human Evaluation (GMDCSA-24)
+### 1. 4-Fold LOSO Cross-Validation on Real Human Data (GMDCSA-24)
 
 | Model Architecture | Parameters | Window F1 (Mean ± Std) | Window Recall | Window Precision | AUROC | Event-Level Recall | Unconfirmed FA/hr | Mean Detection Delay |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **TemporalCNN (Model B)** | **66,274** | **0.7570 ± 0.1175** | **0.8148** | **0.7149** | **0.8821** | **95.7%** | **119.72** | **1.66s** |
-| **BaselineMLP (Model A)** | 100,322 | 0.7831 ± 0.1038 | 0.8966 | 0.6986 | 0.8926 | 96.7% | 140.43 | 1.49s |
-| **SmallTCN (Model C)** | 67,154 | 0.6889 ± 0.0841 | 0.7513 | 0.6523 | 0.8516 | 89.9% | 131.83 | 1.61s |
+| BaselineMLP (Model A) | 100,322 | 0.7831 ± 0.1038 | 0.8966 | 0.6986 | 0.8926 | 96.7% | 140.43 | 1.49s |
+| SmallTCN (Model C) | 67,154 | 0.6889 ± 0.0841 | 0.7513 | 0.6523 | 0.8516 | 89.9% | 131.83 | 1.61s |
 
-*Fold 3 Test Subject 3 (Best Fold Checkpoint)*: **100% Event Recall (21/21 falls detected)**, **0.9104 F1**, **0.9815 AUROC**.
+*Fold 3 Test Subject 3 (Primary Checkpoint)*: **100% Event Recall (21/21 falls detected)**, **0.9104 F1**, **0.9815 AUROC**, **1.81s detection delay**.
 
-### 2. Consumer CPU Hardware Latency Profile (Batch Size = 1)
+### 2. Measured Consumer CPU Latency Profile (Batch Size = 1)
 
-Measured on consumer desktop/laptop x86_64 CPU:
+Measured on consumer x86_64 CPU hardware (Intel/AMD):
 
-| Pipeline Stage | Implementation | Median Latency | P95 Latency | Memory / Notes |
+| Pipeline Stage | Implementation | Median Latency | P95 Latency | Memory / Operational Notes |
 | :--- | :--- | :---: | :---: | :--- |
-| **Model Loading** | PyTorch vs ONNX | 14.60 ms | — | ONNX session init: 7.63 ms |
+| **Model Loading** | PyTorch vs ONNX | 14.60 ms | — | ONNX session initialization: 7.63 ms |
 | **Pose Detection** | MediaPipe Tasks API | 23.60 ms | 29.89 ms | TFLite XNNPACK CPU delegate |
-| **Preprocessing** | Skeleton Normalization | 0.29 ms | 0.41 ms | Hip-centering & torso scaling |
-| **Classifier Inference** | **ONNX Runtime (CPU)** | **0.20 ms** | **0.28 ms** | **2.7× faster than PyTorch (0.56 ms)** |
-| **Uncertainty Policy** | Temperature + Rejection | 0.03 ms | 0.05 ms | Fitted $T = 1.627$ |
+| **Feature Preprocessing** | Skeleton Normalization | 0.29 ms | 0.41 ms | Hip centering and torso scaling |
+| **Classifier Inference** | **ONNX Runtime (CPU)** | **0.20 ms** | **0.28 ms** | **2.72× faster than PyTorch CPU (0.56 ms)** |
+| **Uncertainty Policy** | Temperature + Rejection | 0.03 ms | 0.05 ms | Calibrated with fitted T = 1.627 |
 | **Temporal Confirmation** | K-Window State Machine | 0.002 ms | 0.004 ms | Sliding confirmation buffer |
-| **Grounded Explainer** | Template Rule Engine | 0.005 ms | 0.008 ms | Zero GPU memory overhead |
-| **End-to-End Video** | Full Analysis Pipeline | — | — | **23.2 FPS (2.32× Real-Time at 10 Hz)** |
-| **Peak RAM Usage** | Entire Python Process | — | — | **561.2 MB Peak RAM** |
+| **Grounded Explainer** | Template Rule Engine | 0.005 ms | 0.008 ms | Deterministic, zero GPU overhead |
+| **End-to-End Processing** | Full Video Pipeline | — | — | **23.2 FPS (2.32× Real-Time at 10 Hz)** |
+| **Peak RAM Footprint** | Complete Process | — | — | **561.2 MB resident set size** |
 
 ---
 
-## 🖥️ Interactive Web Demonstration
+## Demonstration Interface
 
 The local Gradio application (`demo/app.py`) provides:
-- **Video Upload & Webcam Recording**: Test with uploaded MP4 clips or live webcam streams.
-- **Annotated Skeleton Overlay**: Color-coded tracking HUD (Green = Normal, Amber = Uncertain, Red = Confirmed Fall).
-- **Temporal Activity Trajectory**: Continuous plot of calibrated fall probability, decision thresholds, uncertainty bounds, and confirmed fall zones.
-- **Adjustable Confirmation Slider**: Switch between raw detection ($K=1$) and confirmed multi-window alarms ($K \ge 2$).
-- **Dual Runtime Backends**: Toggle between ONNX Runtime (CPU) and PyTorch CPU on the fly.
-- **Evidence-Grounded Explanations**: Factually bounded summaries validated by an automated safety checker.
+- **Input Flexibility**: Video file upload (MP4) and live webcam stream capture.
+- **Annotated Playback**: Tracked skeletal overlays with frame-level state banners (Normal, Uncertain, Confirmed Fall).
+- **Temporal Probability Trajectory**: Continuous plot displaying calibrated fall probabilities, decision thresholds, uncertainty bounds, and shaded confirmation regions.
+- **Configurable Confirmation**: Interactive parameter controls for confirmation window count ($K$) and confidence thresholds.
+- **Telemetry Card**: Real-time measurement of inference latency, detection delays, tracking visibility, and process memory.
+- **Safety-Verified Explanations**: Concise, factual summaries validated by `EvidenceConsistencyChecker` to eliminate hallucinated injury or dispatch claims.
 
 ---
 
-## 🛠️ Testing & Reproducibility
+## Verification and Reproducibility
 
-### Execute Full Test Suite (22 Tests)
+### Automated Test Suite (22 Unit and Integration Tests)
+
 ```bash
 # Windows
 .\scripts\run_tests.ps1
@@ -117,37 +122,54 @@ The local Gradio application (`demo/app.py`) provides:
 ./scripts/run_tests.sh
 ```
 
-### Run Consumer CPU Latency Benchmarks
+### CPU Latency Benchmarking
+
 ```bash
 python src/evaluation/benchmark_cpu.py
 ```
 
-### Re-Train 4-Fold LOSO Models on Real GMDCSA-24 Data
+### LOSO Cross-Validation Training on GMDCSA-24 Data
+
 ```bash
 python experiments/gmdcsa24_real/src/train_loso.py
 ```
 
 ---
 
-## ⚠️ Limitations & Disclosures
+## Research Limitations and Safety Disclosures
 
-- **Staged Falls**: Trained on laboratory-staged falls by 4 healthy young adults onto protective mats. Not clinically validated on frail elderly cohorts.
-- **No Safety Certification**: VisionGuard Lite is an academic research software baseline. It is **not** certified as an emergency medical device.
-- For complete disclosure of false alarms, occlusions, and clinical boundaries, review [LIMITATIONS.md](LIMITATIONS.md).
+- **Staged Conditions**: Training data reflects laboratory-staged falls by 4 healthy adult participants onto protective mats. The system has not been evaluated on authentic falls in geriatric populations.
+- **Assistive Devices**: Walking aids (canes, walkers, wheelchairs) were not present in the participant cohort and may cause keypoint occlusions.
+- **Not a Medical Device**: VisionGuard Lite is research software provided for academic evaluation. It is not certified for clinical patient monitoring, emergency dispatch, or unsupervised life-safety applications.
 
----
-
-## 📄 Documentation Directory
-
-- [ARCHITECTURE.md](ARCHITECTURE.md) — System design, keypoint mapping, and dataflow.
-- [MODEL_CARD.md](MODEL_CARD.md) — Architecture specs, parameters, and training metrics.
-- [DATASET.md](DATASET.md) — Data provenance, Zenodo DOIs, and privacy protocols.
-- [LIMITATIONS.md](LIMITATIONS.md) — Clinical, hardware, and operational boundaries.
-- [LOCAL_VALIDATION_REPORT.md](LOCAL_VALIDATION_REPORT.md) — Step-by-step verification audit.
+Detailed limitations and clinical boundary disclosures are documented in [LIMITATIONS.md](LIMITATIONS.md).
 
 ---
 
-## 📜 License & Citation
+## Documentation Index
 
-Licensed under the [MIT License](LICENSE).  
-If you use this project in your research, please cite the GMDCSA-24 dataset (*Data in Brief*, 2024) and the VisionGuard Lite project.
+- [ARCHITECTURE.md](ARCHITECTURE.md): Architectural specifications, landmark mapping, and coordinate normalization.
+- [MODEL_CARD.md](MODEL_CARD.md): Model parameters, training configuration, and cross-validation metrics.
+- [DATASET.md](DATASET.md): Dataset provenance, citations, Zenodo DOIs, and privacy protocols.
+- [LIMITATIONS.md](LIMITATIONS.md): Operational trade-offs, clinical boundaries, and safety disclosures.
+- [LOCAL_VALIDATION_REPORT.md](LOCAL_VALIDATION_REPORT.md): Step-by-step local validation report.
+
+---
+
+## License and Citation
+
+This repository is licensed under the [MIT License](LICENSE).
+
+When using this work in academic research, please cite the GMDCSA-24 dataset and this project:
+
+```bibtex
+@article{alam2024gmdcsa24,
+  title={GMDCSA24: A Dataset for Human Fall Detection in Videos},
+  author={Alam, Ekram and Sufian, Abu and Dutta, Paramartha and Leo, Marco and Hameed, I. A.},
+  journal={Data in Brief},
+  volume={56},
+  pages={110822},
+  year={2024},
+  doi={10.1016/j.dib.2024.110822}
+}
+```

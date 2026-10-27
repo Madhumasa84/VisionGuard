@@ -1,4 +1,4 @@
-# 🔍 VisionGuard Lite — Repository Audit Report (Phase 1)
+# VisionGuard Lite: Repository Audit Report (Phase 1)
 
 **Audit Date**: October 2026  
 **Auditor**: Antigravity Autonomous Verification Suite  

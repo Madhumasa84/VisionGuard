@@ -1,4 +1,4 @@
-# 🏛️ VisionGuard Lite — System Architecture
+# VisionGuard Lite: System Architecture
 
 **Document Version**: 2.0  
 **Target Environment**: CPU-First Edge and Local Desktop (Windows 10/11, Ubuntu 20.04+, macOS)

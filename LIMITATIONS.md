@@ -1,4 +1,4 @@
-# ⚠️ Scientific Limitations & Safety Disclosures
+# Scientific Limitations and Safety Disclosures
 
 VisionGuard Lite is an open-source academic research demonstration and baseline implementation. To maintain scientific integrity, researchers and prospective deployers must consider the following fundamental limitations.
 
