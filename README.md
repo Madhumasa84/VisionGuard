@@ -1,14 +1,14 @@
-# VisionGuard Lite
+# VisionGuard
 
 CPU-based fall-detection research from human pose sequences. Analyze a recorded video or webcam clip with a lightweight temporal classifier, inspect its probability timeline, and review an explanation that acknowledges uncertainty.
 
-[![Tests](https://github.com/Madhumasa84/Edge_fall/actions/workflows/tests.yml/badge.svg)](https://github.com/Madhumasa84/Edge_fall/actions/workflows/tests.yml)
+[![Tests](https://github.com/Madhumasa84/VisionGuard/actions/workflows/tests.yml/badge.svg)](https://github.com/Madhumasa84/VisionGuard/actions/workflows/tests.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 **Research software, not a medical device.** The model can miss falls and produce frequent false alerts. It has not been validated for clinical use, emergency dispatch, or unsupervised safety monitoring. See [limitations](docs/limitations.md).
 
-![VisionGuard Lite video analysis workspace](docs/assets/demo-preview.png)
+![VisionGuard video analysis workspace](docs/assets/demo-preview.png)
 
 ## Overview
 
@@ -25,8 +25,8 @@ Requires Python 3.10 or later. Install FFmpeg for browser-compatible video conve
 ### Linux and macOS
 
 ```bash
-git clone https://github.com/Madhumasa84/Edge_fall.git
-cd Edge_fall
+git clone https://github.com/Madhumasa84/VisionGuard.git
+cd VisionGuard
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-local.txt
@@ -36,8 +36,8 @@ python -m pip install -r requirements-local.txt
 ### Windows PowerShell
 
 ```powershell
-git clone https://github.com/Madhumasa84/Edge_fall.git
-cd Edge_fall
+git clone https://github.com/Madhumasa84/VisionGuard.git
+cd VisionGuard
 .\scripts\setup_windows.ps1
 .\scripts\run_local.ps1
 ```
@@ -74,7 +74,7 @@ The displayed **confirmation policy delay** starts at the first positive window 
 ## Project structure
 
 ```text
-Edge_fall/
+VisionGuard/
 ├── demo/                       # Gradio application and bundled example clip
 │   ├── app.py                  # Pipeline orchestration and local launcher
 │   ├── ui.py                   # Interface layout and result presentation
